@@ -1,0 +1,49 @@
+services:
+  goapp:
+#    build: .
+    container_name: lh-whatsapp
+    volumes:
+      - goapp_data:/opt/whatsapp/
+    image: lh-whatsapp:latest
+    ports:
+      - 8080:8080
+      - 8081:8081
+    environment:
+      # put here the token used for testing
+      - DB_USER=hold
+      - DB_PASSWORD=hold
+    depends_on:
+      - elasticsearch
+      - kibana
+      - filebeat
+
+  elasticsearch:
+    container_name: lh-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.4
+    environment:
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - "discovery.type=single-node"
+    ports:
+      - 9200:9200
+
+  kibana:
+    container_name: lh-kibana
+    image: docker.elastic.co/kibana/kibana:7.13.4
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+  filebeat:
+    image: "docker.elastic.co/beats/filebeat:7.13.4"
+    user: root
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  goapp_data:
