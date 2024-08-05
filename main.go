@@ -55,22 +55,20 @@ func eventHandler(evt interface{}) {
 
 		// Print the JSON string
 		fmt.Println(string(jsonData))
-
-		//fmt.Println(v.Info.PushName, ": ", v.Message.GetConversation())
 	}
 }
 
 func main() {
 	dbLog := waLog.Stdout("Database", "INFO", true)
 	/*
-		_, err := sql.Open("sqlite3", "examplestore.db")
+		_, err := sql.Open("sqlite3", "device.db")
 		if err != nil {
 			panic(err)
 		}
 	*/
 
 	// Make sure you add appropriate DB connector imports, e.g. github.com/mattn/go-sqlite3 for SQLite
-	container, err := sqlstore.New("sqlite3", "file:examplestore.db?_foreign_keys=on", dbLog)
+	container, err := sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
 	if err != nil {
 		panic(err)
 	}

@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 \
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
-COPY examplestore.db .
+COPY device.db .
 
 RUN chmod +x ./main
 
