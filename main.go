@@ -22,7 +22,7 @@ type Log struct {
 	Legalhold Kibana
 }
 
-// Legalhold log stucture
+// Kibana: Legalhold log stucture
 type Kibana struct {
 	ID     string `json:"id"`
 	Sent   int64  `json:"sent"`
