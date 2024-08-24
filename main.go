@@ -14,36 +14,26 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 var container *sqlstore.Container
 
 func generateQRCode(w http.ResponseWriter, r *http.Request) {
-	deviceStore, err := container.GetFirstDevice()
-	if err != nil {
-		panic(err)
-	}
+	deviceStore := container.NewDevice()
 
 	clientLog := waLog.Stdout("Client", "INFO", true)
 	client := whatsmeow.NewClient(deviceStore, clientLog)
 
-	if client.Store.ID != nil {
-		fmt.Println("DB is not empty. ID: ", client.Store.ID)
-		w.Header().Set("Content-Type", "text/html")
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("The Device is already linked"))
-		return
-	}
-
 	qrChan, _ := client.GetQRChannel(context.Background())
 
-	err = client.Connect()
+	err := client.Connect()
 	if err != nil {
 		panic(err)
 	}
 
-	client.AddEventHandler(eventHandler)
+	client.AddEventHandler(func(evt interface{}) {
+		eventHandler(client, evt)
+	})
 
 	var buf bytes.Buffer
 
@@ -79,10 +69,6 @@ func generateQRCode(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Type", "text/html")
 				w.WriteHeader(http.StatusOK)
 				_, err = w.Write([]byte(html))
-				if err != nil {
-					http.Error(w, "Failed to write response", http.StatusInternalServerError)
-					return
-				}
 			}
 		} else {
 			fmt.Println("Login event:", evt.Event)
@@ -103,7 +89,9 @@ func main() {
 
 	clientLog := waLog.Stdout("Client", "INFO", true)
 	client := whatsmeow.NewClient(deviceStore, clientLog)
-	client.AddEventHandler(eventHandler)
+	client.AddEventHandler(func(evt interface{}) {
+		eventHandler(client, evt)
+	})
 
 	// Already logged in, just connect
 	if client.Store.ID != nil {
@@ -135,37 +123,48 @@ type Log struct {
 
 // Legalhold log stucture for Kibana
 type Kibana struct {
+	LHID   string `json:"lhid"`
 	ID     string `json:"id"`
-	Sent   int64  `json:"sent"`
+	Sent   string `json:"sent"`
 	Sender string `json:"sender"`
 	Text   string `json:"text"`
 	From   string `json:"from"`
+	To     string `json:"to"`
+	Type   string `json:"type"`
 }
 
-func eventHandler(evt interface{}) {
+func eventHandler(client *whatsmeow.Client, evt interface{}) {
 	switch v := evt.(type) {
 	case *events.Message:
-		// Initializing the Kibana object
-		kibana := Kibana{
-			ID:     v.Info.ID,
-			Sent:   time.Now().Unix(),
-			Sender: v.Info.PushName,
-			Text:   v.Message.GetConversation(),
-			From:   v.Info.Sender.String(),
-		}
+		if v.Info.Type == "text" {
+			// Initializing the Kibana object
+			kibana := Kibana{
+				LHID:   client.Store.ID.User,
+				ID:     v.Info.ID,
+				Sent:   v.Info.Timestamp.String(),
+				Sender: v.Info.PushName,
+				From:   v.Info.Sender.String(),
+				Type:   v.Info.Type,
+				Text:   v.Message.GetConversation(),
+			}
 
-		log := Log{
-			Legalhold: kibana,
-		}
+			if v.Info.DeviceSentMeta != nil {
+				kibana.To = v.Info.DeviceSentMeta.DestinationJID
+			}
 
-		// Marshal the Kibana object to JSON
-		jsonData, err := json.Marshal(log)
-		if err != nil {
-			fmt.Printf("Error marshaling Kibana object to JSON: %v\n", err)
-			return
-		}
+			log := Log{
+				Legalhold: kibana,
+			}
 
-		// Print the JSON string
-		fmt.Println(string(jsonData))
+			// Marshal the Kibana object to JSON
+			jsonData, err := json.Marshal(log)
+			if err != nil {
+				fmt.Printf("Error marshaling Kibana object to JSON: %v\n", err)
+				return
+			}
+
+			// Print the JSON string
+			fmt.Println(string(jsonData))
+		}
 	}
 }
