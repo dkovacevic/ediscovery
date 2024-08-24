@@ -1,21 +1,132 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
-
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/mdp/qrterminal"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	"go.mau.fi/whatsmeow/types/events"
 	waLog "go.mau.fi/whatsmeow/util/log"
+	"net/http"
+	"os"
+	"strings"
+	"time"
 )
+
+var container *sqlstore.Container
+
+func generateQRCode(w http.ResponseWriter, r *http.Request) {
+	deviceStore, err := container.GetFirstDevice()
+	if err != nil {
+		panic(err)
+	}
+
+	clientLog := waLog.Stdout("Client", "INFO", true)
+	client := whatsmeow.NewClient(deviceStore, clientLog)
+
+	if client.Store.ID != nil {
+		fmt.Println("DB is not empty. ID: ", client.Store.ID)
+		w.Header().Set("Content-Type", "text/html")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("The Device is already linked"))
+		return
+	}
+
+	qrChan, _ := client.GetQRChannel(context.Background())
+
+	err = client.Connect()
+	if err != nil {
+		panic(err)
+	}
+
+	client.AddEventHandler(eventHandler)
+
+	var buf bytes.Buffer
+
+	for evt := range qrChan {
+		if evt.Event == "code" {
+			fmt.Println("QRChannel event: ", evt.Event)
+
+			if buf.Len() == 0 {
+				// Create a buffer to capture the QR code output
+				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, &buf)
+
+				qr := buf.String()
+
+				// Serve HTML with embedded base64 QR code
+				all := strings.ReplaceAll(qr, "\n", "<br>")
+				html := fmt.Sprintf(`
+							<!DOCTYPE html>
+							<html lang="en">
+							<head>
+								<meta charset="UTF-8">
+								<meta name="viewport" content="width=device-width, initial-scale=1.0">
+								<title>QR Code</title>
+							</head>
+							<body>
+								<h1>QR Code</h1>
+								<pre>%s</pre>
+								<h2>Scan this code in your WhatsApp client by openinig Settings, Link Device</h2>
+								<pre>%s</pre>
+							</body>
+							</html>
+						`, all, all)
+
+				w.Header().Set("Content-Type", "text/html")
+				w.WriteHeader(http.StatusOK)
+				_, err = w.Write([]byte(html))
+				if err != nil {
+					http.Error(w, "Failed to write response", http.StatusInternalServerError)
+					return
+				}
+			}
+		} else {
+			fmt.Println("Login event:", evt.Event)
+		}
+	}
+}
+
+func main() {
+	dbLog := waLog.Stdout("Database", "INFO", true)
+
+	// Initialize the database connection
+	container, _ = sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
+
+	deviceStore, err := container.GetFirstDevice()
+	if err != nil {
+		panic(err)
+	}
+
+	clientLog := waLog.Stdout("Client", "INFO", true)
+	client := whatsmeow.NewClient(deviceStore, clientLog)
+	client.AddEventHandler(eventHandler)
+
+	// Already logged in, just connect
+	if client.Store.ID != nil {
+		fmt.Println("Connecting WhatsApp client:", client.Store.ID)
+
+		err = client.Connect()
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	http.HandleFunc("/link", generateQRCode)
+
+	port := "8080"
+	fmt.Println("Server running on port", port)
+	err = http.ListenAndServe(":"+port, nil)
+	if err != nil {
+		fmt.Println("Failed to start server:", err)
+		os.Exit(1)
+	}
+
+	select {}
+}
 
 // Log represents the top-level log structure.
 type Log struct {
@@ -57,60 +168,4 @@ func eventHandler(evt interface{}) {
 		// Print the JSON string
 		fmt.Println(string(jsonData))
 	}
-}
-
-func main() {
-	dbLog := waLog.Stdout("Database", "INFO", true)
-	/*
-		_, err := sql.Open("sqlite3", "device.db")
-		if err != nil {
-			panic(err)
-		}
-	*/
-
-	// Make sure you add appropriate DB connector imports, e.g. github.com/mattn/go-sqlite3 for SQLite
-	container, err := sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
-	if err != nil {
-		panic(err)
-	}
-	// If you want multiple sessions, remember their JIDs and use .GetDevice(jid) or .GetAllDevices() instead.
-	deviceStore, err := container.GetFirstDevice()
-	if err != nil {
-		panic(err)
-	}
-	clientLog := waLog.Stdout("Client", "INFO", true)
-	client := whatsmeow.NewClient(deviceStore, clientLog)
-	client.AddEventHandler(eventHandler)
-
-	if client.Store.ID == nil {
-		// No ID stored, new login
-		qrChan, _ := client.GetQRChannel(context.Background())
-		err = client.Connect()
-		if err != nil {
-			panic(err)
-		}
-		for evt := range qrChan {
-			if evt.Event == "code" {
-				// Render the QR code here
-				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
-				// or just manually `echo 2@... | qrencode -t ansiutf8` in a terminal
-				//fmt.Println("QR code:", evt.Code)
-			} else {
-				fmt.Println("Login event:", evt.Event)
-			}
-		}
-	} else {
-		// Already logged in, just connect
-		err = client.Connect()
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	// Listen to Ctrl+C (you can also do something else that prevents the program from exiting)
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	<-c
-
-	client.Disconnect()
 }
