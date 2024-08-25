@@ -52,6 +52,14 @@ func generateQRCode(w http.ResponseWriter, _ *http.Request) {
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1.0">
 						<title>QR Code</title>
+						<style>
+								pre {
+									font-family: "Courier New", Courier, monospace;
+									font-size: 12px;
+									line-height: 1;
+									text-align: center;
+								}
+						</style>
 					</head>
 					<body>
 						<h2>QR Code</h2>
