@@ -1,13 +1,13 @@
 services:
   goapp:
-#    build: .
+    build: .
     container_name: lh-whatsapp
     volumes:
       - goapp_data:/opt/whatsapp/
     image: lh-whatsapp:latest
+#    command: ["./main"]
     ports:
       - 8080:8080
-      - 8081:8081
     environment:
       # put here the token used for testing
       - DB_USER=hold

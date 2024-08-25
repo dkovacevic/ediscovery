@@ -14,10 +14,10 @@ type Log struct {
 	Legalhold Kibana
 }
 
-// Legalhold log structure for Kibana
+// Kibana Legalhold log structure for Kibana
 type Kibana struct {
 	LHID   string `json:"lhid"`
-	ID     string `json:"id"`
+	ID     string `json:"messageId"`
 	Sent   string `json:"sent"`
 	Sender string `json:"sender"`
 	Text   string `json:"text"`
@@ -44,18 +44,22 @@ func eventHandler(client *whatsmeow.Client, evt interface{}) {
 			kibana.To = v.Info.DeviceSentMeta.DestinationJID
 		}
 
-		log := Log{
-			Legalhold: kibana,
-		}
-
-		// Marshal the Kibana object to JSON
-		jsonData, err := json.Marshal(log)
-		if err != nil {
-			fmt.Printf("Error marshaling Kibana object to JSON: %v\n", err)
-			return
-		}
-
-		// Print the JSON string
-		fmt.Println(string(jsonData))
+		trace(kibana)
 	}
+}
+
+func trace(kibana Kibana) {
+	log := Log{
+		Legalhold: kibana,
+	}
+
+	// Marshal the Kibana object to JSON
+	jsonData, err := json.Marshal(log)
+	if err != nil {
+		fmt.Printf("Error marshaling Kibana object to JSON: %v\n", err)
+		return
+	}
+
+	// Print the JSON string
+	fmt.Println(string(jsonData))
 }

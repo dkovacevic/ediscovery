@@ -33,17 +33,14 @@ func generateQRCode(w http.ResponseWriter, _ *http.Request) {
 	var buf bytes.Buffer
 
 	for evt := range qrChan {
-		if evt.Event == "code" {
-			fmt.Println("QRChannel event: ", evt.Event)
+		fmt.Println("QRChannel event: ", evt.Event)
 
+		if evt.Event == "code" {
 			if buf.Len() == 0 {
 				// Create a buffer to capture the QR code output
 				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, &buf)
 
-				qr := buf.String()
-
-				// Serve HTML with embedded base64 QR code
-				all := strings.ReplaceAll(qr, "\n", "<br>")
+				all := strings.ReplaceAll(buf.String(), "\n", "<br>")
 				html := fmt.Sprintf(`
 					<!DOCTYPE html>
 					<html lang="en">
