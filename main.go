@@ -82,24 +82,26 @@ func main() {
 	// Initialize the database connection
 	container, _ = sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
 
-	deviceStore, err := container.GetFirstDevice()
+	devices, err := container.GetAllDevices()
 	if err != nil {
 		panic(err)
 	}
 
-	clientLog := waLog.Stdout("Client", "INFO", true)
-	client := whatsmeow.NewClient(deviceStore, clientLog)
-	client.AddEventHandler(func(evt interface{}) {
-		eventHandler(client, evt)
-	})
+	for _, deviceStore := range devices {
+		clientLog := waLog.Stdout("Client", "INFO", true)
+		client := whatsmeow.NewClient(deviceStore, clientLog)
+		client.AddEventHandler(func(evt interface{}) {
+			eventHandler(client, evt)
+		})
 
-	// Already logged in, just connect
-	if client.Store.ID != nil {
-		fmt.Println("Connecting WhatsApp client:", client.Store.ID)
+		// Already logged in, just connect
+		if client.Store.ID != nil {
+			fmt.Println("Connecting WhatsApp client:", client.Store.ID)
 
-		err = client.Connect()
-		if err != nil {
-			panic(err)
+			err = client.Connect()
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 
