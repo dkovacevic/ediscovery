@@ -1,11 +1,11 @@
-module whatsmeow
+module lh-whatsapp
 
 go 1.21
 
 require (
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/mdp/qrterminal v1.0.1
-	go.mau.fi/whatsmeow v0.0.0-20240726213518-bb5852f056ca
+	go.mau.fi/whatsmeow v0.0.0-20240821142752-3d63c6fcc1a7
 )
 
 require (
