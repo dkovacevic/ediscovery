@@ -28,10 +28,12 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the source code into the container
-COPY main.go .
+RUN mkdir src
+
+COPY src/* ./src/
 
 # Build the Go app
-RUN go build -o main .
+RUN go build -o lh-whatsapp ./src
 
 # Second stage: create the runtime image
 FROM debian:bullseye-slim
@@ -47,10 +49,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the Pre-built binary file from the previous stage
-COPY --from=builder /app/main .
+COPY --from=builder /app/lh-whatsapp .
 COPY device.db .
 
-RUN chmod +x ./main
+RUN chmod +x lh-whatsapp
 
 # Command to run the executable
-CMD ["./main"]
+CMD ["./lh-whatsapp"]
