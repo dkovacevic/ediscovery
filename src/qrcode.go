@@ -18,9 +18,13 @@ func generateQRCode(w http.ResponseWriter, _ *http.Request) {
 	clientLog := waLog.Stdout("Client", "INFO", true)
 	client := initializeClient(deviceStore, clientLog)
 
-	qrChan, _ := client.GetQRChannel(context.Background())
+	qrChan, err := client.GetQRChannel(context.Background())
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
-	err := client.Connect()
+	err = client.Connect()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
