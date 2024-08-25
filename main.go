@@ -9,6 +9,7 @@ import (
 	"github.com/mdp/qrterminal"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store/sqlstore"
+	"go.mau.fi/whatsmeow/types"
 	"go.mau.fi/whatsmeow/types/events"
 	waLog "go.mau.fi/whatsmeow/util/log"
 	"net/http"
@@ -18,7 +19,13 @@ import (
 
 var container *sqlstore.Container
 
-func generateQRCode(w http.ResponseWriter, r *http.Request) {
+func generateQRCode(w http.ResponseWriter, _ *http.Request) {
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		http.Error(w, "Streaming unsupported!", http.StatusInternalServerError)
+		return
+	}
+
 	deviceStore := container.NewDevice()
 
 	clientLog := waLog.Stdout("Client", "INFO", true)
@@ -32,7 +39,7 @@ func generateQRCode(w http.ResponseWriter, r *http.Request) {
 	}
 
 	client.AddEventHandler(func(evt interface{}) {
-		eventHandler(client, evt)
+		eventHandler(*client.Store.ID, evt)
 	})
 
 	var buf bytes.Buffer
@@ -58,17 +65,18 @@ func generateQRCode(w http.ResponseWriter, r *http.Request) {
 								<title>QR Code</title>
 							</head>
 							<body>
-								<h1>QR Code</h1>
+								<h2>QR Code</h2>
 								<pre>%s</pre>
 								<h2>Scan this code in your WhatsApp client by openinig Settings, Link Device</h2>
-								<pre>%s</pre>
 							</body>
 							</html>
-						`, all, all)
+						`, all)
 
 				w.Header().Set("Content-Type", "text/html")
 				w.WriteHeader(http.StatusOK)
-				_, err = w.Write([]byte(html))
+				_, _ = w.Write([]byte(html))
+
+				flusher.Flush()
 			}
 		} else {
 			fmt.Println("Login event:", evt.Event)
@@ -91,7 +99,7 @@ func main() {
 		clientLog := waLog.Stdout("Client", "INFO", true)
 		client := whatsmeow.NewClient(deviceStore, clientLog)
 		client.AddEventHandler(func(evt interface{}) {
-			eventHandler(client, evt)
+			eventHandler(*client.Store.ID, evt)
 		})
 
 		// Already logged in, just connect
@@ -135,13 +143,13 @@ type Kibana struct {
 	Type   string `json:"type"`
 }
 
-func eventHandler(client *whatsmeow.Client, evt interface{}) {
+func eventHandler(lhid types.JID, evt interface{}) {
 	switch v := evt.(type) {
 	case *events.Message:
 		if v.Info.Type == "text" {
 			// Initializing the Kibana object
 			kibana := Kibana{
-				LHID:   client.Store.ID.User,
+				LHID:   lhid.User,
 				ID:     v.Info.ID,
 				Sent:   v.Info.Timestamp.String(),
 				Sender: v.Info.PushName,
