@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/types"
+	"log"
 	"strings"
 
 	"go.mau.fi/whatsmeow/types/events"
@@ -56,16 +57,25 @@ func eventHandler(client *whatsmeow.Client, evt interface{}) {
 		}
 
 		trace(kibana)
+
+		storeDB(kibana)
+	}
+}
+
+func storeDB(kibana Kibana) {
+	err := db.InsertKibana(kibana)
+	if err != nil {
+		log.Fatalf("failed to insert kibana record: %v", err)
 	}
 }
 
 func trace(kibana Kibana) {
-	log := Log{
+	l := Log{
 		Legalhold: kibana,
 	}
 
 	// Marshal the Kibana object to JSON
-	jsonData, err := json.Marshal(log)
+	jsonData, err := json.Marshal(l)
 	if err != nil {
 		fmt.Printf("Error marshaling Kibana object to JSON: %v\n", err)
 		return
