@@ -2,6 +2,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -28,7 +29,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
-	defer db.Conn.Close()
+
+	defer func(Conn *sql.DB) {
+		err := Conn.Close()
+		if err != nil {
+			log.Fatalf("failed to close the database: %v", err)
+		}
+	}(db.Conn)
 
 	devices, err := container.GetAllDevices()
 	if err != nil {
