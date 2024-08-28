@@ -50,7 +50,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends sqlite3 \
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/lh-whatsapp .
-COPY device.db .
 
 RUN chmod +x lh-whatsapp
 

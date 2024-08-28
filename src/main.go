@@ -2,15 +2,18 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	waLog "go.mau.fi/whatsmeow/util/log"
+	"log"
 	"net/http"
 	"os"
 )
 
 var container *sqlstore.Container
+var db *DB
 
 func main() {
 	dbLog := waLog.Stdout("Database", "INFO", true)
@@ -21,6 +24,18 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	db, err = NewDB("device.db")
+	if err != nil {
+		log.Fatalf("failed to connect to database: %v", err)
+	}
+
+	defer func(Conn *sql.DB) {
+		err := Conn.Close()
+		if err != nil {
+			log.Fatalf("failed to close the database: %v", err)
+		}
+	}(db.Conn)
 
 	devices, err := container.GetAllDevices()
 	if err != nil {
