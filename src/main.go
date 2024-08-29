@@ -58,7 +58,11 @@ func main() {
 		})
 	}
 
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/", fs)
+
 	http.HandleFunc("/link", generateQRCode)
+	http.HandleFunc("/api/devices", getDevices)
 
 	port := "8080"
 	fmt.Println("Server running on port", port)
