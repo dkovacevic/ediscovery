@@ -23,13 +23,16 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         with:
-          region: us-east-1
+          region: eu-west-3
+          mask-password: true
+          registry-type: private
+          skip-logout: false
 
       - name: Extract ECR repository URI
         id: ecr
-        run: echo "::set-output name=uri::$(aws ecr describe-repositories --repository-names orion --region us-east-1 --query 'repositories[0].repositoryUri' --output text)"
+        run: echo "::set-output name=uri::$(aws ecr describe-repositories --repository-names orion --region eu-west-3 --query 'repositories[0].repositoryUri' --output text)"
         env:
-          AWS_REGION: us-east-1
+          AWS_REGION: eu-west-3
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
