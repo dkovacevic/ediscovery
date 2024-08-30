@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "elb"
+    service.beta.kubernetes.io/aws-load-balancer-internal: "false"  # Ensure this is set to false for public access
+spec:
+  type: LoadBalancer
+  selector:
+    app: lh-whatsapp
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  loadBalancerSourceRanges:
+    - 0.0.0.0/0  # Allows traffic from any IP address (public access)

@@ -31,6 +31,12 @@ WORKDIR /opt/whatsapp
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/lh-whatsapp .
 
+RUN mkdir static
+RUN mkdir resources
+
+COPY static/* ./static/
+COPY resources/* ./resources/
+
 RUN chmod +x lh-whatsapp
 
 # Command to run the executable
