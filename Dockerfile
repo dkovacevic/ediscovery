@@ -1,5 +1,5 @@
 # Use the same Debian version for both build and runtime stages
-FROM golang:1.21 AS builder
+FROM golang:1.21-alpine AS builder
 
 # Set the current working directory inside the container
 WORKDIR /app
@@ -16,10 +16,10 @@ RUN mkdir src
 COPY src/* ./src/
 
 # Build the Go app
-RUN go build -o lh-whatsapp ./src
+RUN CGO_ENABLED=0 GOOS=linux go build -o lh-whatsapp ./src
 
 # Second stage: create the runtime image
-FROM debian:bullseye-slim
+FROM golang:latest
 
 RUN mkdir /opt/whatsapp
 
