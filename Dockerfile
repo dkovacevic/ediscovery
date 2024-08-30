@@ -1,22 +1,5 @@
 # Use the same Debian version for both build and runtime stages
-FROM debian:bullseye AS builder
-
-# Install Go and necessary packages for CGO
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget \
-    ca-certificates \
-    gcc \
-    libc6-dev \
-    && wget https://golang.org/dl/go1.21.1.linux-arm64.tar.gz \
-    && tar -C /usr/local -xzf go1.21.1.linux-arm64.tar.gz \
-    && rm go1.21.1.linux-arm64.tar.gz \
-    && ln -s /usr/local/go/bin/go /usr/local/bin/go
-
-# Set Go environment variables
-ENV GOROOT=/usr/local/go
-ENV GOPATH=/go
-ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-ENV CGO_ENABLED=1
+FROM golang:1.21 AS builder
 
 # Set the current working directory inside the container
 WORKDIR /app

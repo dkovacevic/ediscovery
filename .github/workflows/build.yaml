@@ -30,19 +30,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Extract ECR repository URI
-        id: ecr
-        run: echo "::set-output name=uri::$(aws ecr describe-repositories --repository-names orion --region eu-west-3 --query 'repositories[0].repositoryUri' --output text)"
-        env:
-          AWS_REGION: eu-west-3
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - name: Build, tag, and push Docker image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: reponame
-          IMAGE_TAG: ${{ github.sha }}
+          ECR_REPOSITORY: orion
+#          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_TAG: latest
         run: |
-          docker build -t ${{ steps.ecr.outputs.uri }}:latest .
-          docker push ${{ steps.ecr.outputs.uri }}:latest
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
