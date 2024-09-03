@@ -1,3 +1,5 @@
 device.db
 .idea/
 terraform/.terraform/
+terraform/terraform.tfstate
+terraform/plan
