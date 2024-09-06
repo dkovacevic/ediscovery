@@ -105,5 +105,4 @@ func renderQR(w http.ResponseWriter, buf bytes.Buffer) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/plain")
-	w.WriteHeader(http.StatusOK)
 }
