@@ -4,9 +4,16 @@ metadata:
   name: orion-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt
 
 spec:
   ingressClassName: nginx
+
+  tls:
+    - secretName: letsencrypt
+      hosts:
+        - ediscovery.cz
+        - www.ediscovery.cz
 
   defaultBackend:
     service:
@@ -15,7 +22,7 @@ spec:
         number: 80
 
   rules:
-  - host: www.ediscovery.cz
+  - host: ediscovery.cz
     http:
       paths:
       - path: /
@@ -25,3 +32,14 @@ spec:
             name: lh-whatsapp
             port:
               number: 80
+
+  - host: www.ediscovery.cz
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: lh-whatsapp
+              port:
+                number: 80
