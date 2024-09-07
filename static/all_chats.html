@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All WhatsApp Chats for LHID</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .chat .chat-id {
+            font-weight: bold;
+        }
+        .chat .group-name {
+            font-size: 1.2em;
+        }
+        .chat .participants {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<h1>WhatsApp Chats</h1>
+
+<!-- Form to input LHID -->
+<form id="chatsForm">
+    <label for="lhid">LHID:</label>
+    <input type="text" id="lhid" name="lhid" required>
+    <br>
+    <button type="submit">Fetch Chats</button>
+</form>
+
+<!-- Div where chat data will be rendered -->
+<div id="chats">
+    <!-- Chats will be dynamically injected here -->
+</div>
+
+<script src="../scripts/all_chats.js"></script> <!-- Include external JavaScript file -->
+</body>
+</html>

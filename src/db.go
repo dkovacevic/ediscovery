@@ -20,6 +20,13 @@ type ChatMessage struct {
 	SentDate   string
 }
 
+// Chat represents a single chat overview
+type Chat struct {
+	ChatID       string `json:"ChatID"`
+	GroupName    string `json:"GroupName"`
+	Participants string `json:"Participants"`
+}
+
 // NewDB creates a new database connection
 func NewDB(dataSourceName string) (*DB, error) {
 	conn, err := sql.Open("sqlite3", dataSourceName)
@@ -86,4 +93,29 @@ func (db *DB) fetchChat(lhid, chatid string) ([]ChatMessage, error) {
 	}
 
 	return messages, nil
+}
+
+// Fetch all chats for a given lhid
+func (db *DB) fetchAllChats(lhid string) ([]Chat, error) {
+	query := `SELECT chatId, groupName, participants FROM legalhold WHERE lhid = ? GROUP BY chatId`
+	rows, err := db.Conn.Query(query, lhid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var chats []Chat
+	for rows.Next() {
+		var chat Chat
+		if err := rows.Scan(&chat.ChatID, &chat.GroupName, &chat.Participants); err != nil {
+			return nil, err
+		}
+		chats = append(chats, chat)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return chats, nil
 }

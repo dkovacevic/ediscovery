@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .chat-message .sender {
+            font-weight: bold;
+        }
+        .chat-message .text {
+            margin: 5px 0;
+        }
+        .chat-message .sent-date {
+            font-size: 0.8em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<h1>WhatsApp Chat</h1>
+
+<!-- Form to input LHID and ChatID -->
+<form id="chatForm">
+    <label for="lhid">LHID:</label>
+    <input type="text" id="lhid" name="lhid" required>
+    <br>
+    <label for="chatid">ChatID:</label>
+    <input type="text" id="chatid" name="chatid" required>
+    <br>
+    <button type="submit">Fetch Chat</button>
+</form>
+
+<!-- Div where chat messages will be rendered -->
+<div id="chat-messages">
+    <!-- Chat messages will be dynamically injected here -->
+</div>
+
+<script src="../scripts/chat.js"></script> <!-- Include external JavaScript file -->
+</body>
+</html>
