@@ -14,6 +14,12 @@ type DB struct {
 	Conn *sql.DB
 }
 
+type ChatMessage struct {
+	SenderName string
+	Text       string
+	SentDate   string
+}
+
 // NewDB creates a new database connection
 func NewDB(dataSourceName string) (*DB, error) {
 	conn, err := sql.Open("sqlite3", dataSourceName)
@@ -56,4 +62,28 @@ func (db *DB) InsertKibana(k Kibana) error {
 	}
 
 	return nil
+}
+
+// Fetch chat messages based on lhid and chatid
+func (db *DB) fetchChat(lhid, chatid string) ([]ChatMessage, error) {
+	query := `SELECT sender, text, sent FROM legalhold WHERE lhid = ? AND chatId = ? ORDER BY sent`
+	rows, err := db.Conn.Query(query, lhid, chatid)
+	if err != nil {
+		return nil, err
+	}
+
+	var messages []ChatMessage
+	for rows.Next() {
+		var message ChatMessage
+		if err := rows.Scan(&message.SenderName, &message.Text, &message.SentDate); err != nil {
+			return nil, err
+		}
+		messages = append(messages, message)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return messages, nil
 }

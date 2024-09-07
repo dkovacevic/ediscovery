@@ -63,6 +63,7 @@ func main() {
 
 	http.HandleFunc("/link", generateQRCode)
 	http.HandleFunc("/api/devices", getDevices)
+	http.HandleFunc("/chat", chatHandler)
 
 	port := "8080"
 	fmt.Println("Server running on port", port)
