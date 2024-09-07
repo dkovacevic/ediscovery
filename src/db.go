@@ -22,9 +22,9 @@ type ChatMessage struct {
 
 // Chat represents a single chat overview
 type Chat struct {
-	ChatID       string `json:"ChatID"`
-	GroupName    string `json:"GroupName"`
-	Participants string `json:"Participants"`
+	ChatID       string `json:"chatId"`
+	GroupName    string `json:"groupName"`
+	Participants string `json:"participants"` // Ensure this is an array of strings
 }
 
 // NewDB creates a new database connection

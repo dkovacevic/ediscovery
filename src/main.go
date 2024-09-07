@@ -58,11 +58,11 @@ func main() {
 		})
 	}
 
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fs)
+	http.Handle("/", http.FileServer(http.Dir("./static")))
 
 	http.HandleFunc("/link", generateQRCode)
-	http.HandleFunc("/api/devices", getDevices)
+
+	http.HandleFunc("/api/users", getDevices)
 	http.HandleFunc("/api/chat", chatHandler)
 	http.HandleFunc("/api/all-chats", allChatsHandler)
 
