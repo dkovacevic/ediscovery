@@ -14,6 +14,19 @@ type DB struct {
 	Conn *sql.DB
 }
 
+type ChatMessage struct {
+	SenderName string
+	Text       string
+	SentDate   string
+}
+
+// Chat represents a single chat overview
+type Chat struct {
+	ChatID       string `json:"chatId"`
+	GroupName    string `json:"groupName"`
+	Participants string `json:"participants"` // Ensure this is an array of strings
+}
+
 // NewDB creates a new database connection
 func NewDB(dataSourceName string) (*DB, error) {
 	conn, err := sql.Open("sqlite3", dataSourceName)
@@ -56,4 +69,53 @@ func (db *DB) InsertKibana(k Kibana) error {
 	}
 
 	return nil
+}
+
+// Fetch chat messages based on lhid and chatid
+func (db *DB) fetchChat(lhid, chatid string) ([]ChatMessage, error) {
+	query := `SELECT sender, text, sent FROM legalhold WHERE lhid = ? AND chatId = ? ORDER BY sent`
+	rows, err := db.Conn.Query(query, lhid, chatid)
+	if err != nil {
+		return nil, err
+	}
+
+	var messages []ChatMessage
+	for rows.Next() {
+		var message ChatMessage
+		if err := rows.Scan(&message.SenderName, &message.Text, &message.SentDate); err != nil {
+			return nil, err
+		}
+		messages = append(messages, message)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return messages, nil
+}
+
+// Fetch all chats for a given lhid
+func (db *DB) fetchAllChats(lhid string) ([]Chat, error) {
+	query := `SELECT chatId, groupName, participants FROM legalhold WHERE lhid = ? GROUP BY chatId`
+	rows, err := db.Conn.Query(query, lhid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var chats []Chat
+	for rows.Next() {
+		var chat Chat
+		if err := rows.Scan(&chat.ChatID, &chat.GroupName, &chat.Participants); err != nil {
+			return nil, err
+		}
+		chats = append(chats, chat)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return chats, nil
 }

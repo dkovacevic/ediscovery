@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracked Users</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Tracked Users</h1>
+<table id="jidTable">
+    <thead>
+    <tr>
+        <th>JID</th>
+        <th>Name</th>
+        <th>Device</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Data will be populated here by JavaScript -->
+    </tbody>
+</table>
+
+<script src="users.js"></script>
+</body>
+</html>
