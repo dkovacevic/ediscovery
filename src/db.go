@@ -15,9 +15,9 @@ type DB struct {
 }
 
 type ChatMessage struct {
-	SenderName string
-	Text       string
-	SentDate   string
+	SenderName string `json:"sender"`
+	Text       string `json:"text"`
+	SentDate   string `json:"date"`
 }
 
 // Chat represents a single chat overview
