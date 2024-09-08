@@ -13,9 +13,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the source code into the container
-RUN mkdir src
-
-COPY src/* ./src/
+COPY src/ src/
 
 # Build the Go app
 RUN CGO_ENABLED=1 GOOS=linux go build -o lh-whatsapp ./src
@@ -31,11 +29,8 @@ WORKDIR /opt/whatsapp
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/lh-whatsapp .
 
-RUN mkdir static
-RUN mkdir resources
-
-COPY static/* ./static/
-COPY resources/* ./resources/
+COPY static/ static/
+COPY resources/ resources/
 
 RUN chmod +x lh-whatsapp
 
