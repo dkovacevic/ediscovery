@@ -1,42 +1,24 @@
 // event_handler.go
-package main
+package meow
 
 import (
 	"encoding/json"
 	"fmt"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/types"
+	"lh-whatsapp/src/database"
+	"lh-whatsapp/src/models"
 	"log"
 	"strings"
 
 	"go.mau.fi/whatsmeow/types/events"
 )
 
-// Log represents the top-level log structure.
-type Log struct {
-	Legalhold Kibana
-}
-
-// Kibana Legalhold log structure for Kibana
-type Kibana struct {
-	LHID   string `json:"lhid"`
-	ID     string `json:"messageId"`
-	ChatID string `json:"chatId"`
-	Sent   string `json:"sent"`
-	Sender string `json:"sender"`
-	Text   string `json:"text"`
-	From   string `json:"from"`
-	Type   string `json:"type"`
-
-	Group        string `json:"group"`
-	Participants string `json:"participants"`
-}
-
-func eventHandler(client *whatsmeow.Client, evt interface{}) {
+func EventHandler(client *whatsmeow.Client, evt interface{}) {
 	switch v := evt.(type) {
 	case *events.Message:
 		// Initializing the Kibana object
-		kibana := Kibana{
+		kibana := models.Kibana{
 			LHID:   client.Store.ID.User,
 			ID:     v.Info.ID,
 			ChatID: v.Info.Chat.String(),
@@ -62,15 +44,15 @@ func eventHandler(client *whatsmeow.Client, evt interface{}) {
 	}
 }
 
-func storeDB(kibana Kibana) {
-	err := db.InsertKibana(kibana)
+func storeDB(kibana models.Kibana) {
+	err := database.Db.InsertKibana(kibana)
 	if err != nil {
 		log.Fatalf("failed to insert kibana record: %v", err)
 	}
 }
 
-func trace(kibana Kibana) {
-	l := Log{
+func trace(kibana models.Kibana) {
+	l := models.Log{
 		Legalhold: kibana,
 	}
 

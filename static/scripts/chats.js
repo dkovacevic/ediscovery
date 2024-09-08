@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchChatData(lhid) {
-    fetch(`/api/all-chats?lhid=${lhid}`)
+    fetch(`/api/${lhid}/chats`)
         .then(response => response.json())
         .then(data => {
             populateChatsTable(data, lhid);
@@ -31,7 +31,7 @@ function populateChatsTable(data, lhid) {
         // Create a hyperlink for chatId
         const chatIdCell = document.createElement('td');
         const chatIdLink = document.createElement('a');
-        chatIdLink.href = `chat.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}`;
+        chatIdLink.href = `messages.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}`;
         chatIdLink.textContent = item.chatId;
         chatIdCell.appendChild(chatIdLink);
         row.appendChild(chatIdCell);

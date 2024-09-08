@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchChatMessages(chatId, lhid) {
-    fetch(`/api/chat?chatid=${encodeURIComponent(chatId)}&lhid=${encodeURIComponent(lhid)}`)
+    fetch(`/api/${lhid}/chats/${encodeURIComponent(chatId)}/messages`)
         .then(response => response.json())
         .then(data => {
             displayChatMessages(data);

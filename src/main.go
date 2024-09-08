@@ -2,77 +2,56 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
+	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/store/sqlstore"
 	waLog "go.mau.fi/whatsmeow/util/log"
+	"lh-whatsapp/src/database"
+	"lh-whatsapp/src/handlers"
+	"lh-whatsapp/src/meow"
 	"log"
 	"net/http"
-	"os"
 )
-
-var container *sqlstore.Container
-var db *DB
 
 func main() {
 	dbLog := waLog.Stdout("Database", "INFO", true)
 
 	// Initialize the database connection
 	var err error
-	container, err = sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
+	meow.Container, err = sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
 	if err != nil {
 		panic(err)
 	}
 
-	db, err = NewDB("device.db")
+	database.Db, err = database.NewDB("device.db")
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	defer func(Conn *sql.DB) {
-		err := Conn.Close()
-		if err != nil {
-			log.Fatalf("failed to close the database: %v", err)
-		}
-	}(db.Conn)
-
-	devices, err := container.GetAllDevices()
+	err = meow.InitWhatsAppClients()
 	if err != nil {
-		panic(err)
+		log.Fatalf("Failed to Init WhatsApp clients: %v", err)
 	}
 
-	for _, deviceStore := range devices {
-		clientLog := waLog.Stdout("Client", "INFO", true)
-		client := initializeClient(deviceStore, clientLog)
+	router := mux.NewRouter()
 
-		fmt.Println("Connecting WhatsApp client:", client.Store.ID)
+	// Define the API routes
+	router.HandleFunc("/api/users", handlers.GetUsers).Methods("GET")
+	router.HandleFunc("/api/{lhid}/chats", handlers.GetChats).Methods("GET")
+	router.HandleFunc("/api/{lhid}/chats/{chatID}/messages", handlers.GetMessages).Methods("GET")
 
-		err = client.Connect()
-		if err != nil {
-			fmt.Println("Failed to connect the WhatsApp client:", client.Store.ID)
-		}
+	// Handle the "/link" route separately
+	router.HandleFunc("/link", handlers.GenerateQRCode).Methods("GET")
 
-		client.AddEventHandler(func(evt interface{}) {
-			eventHandler(client, evt)
-		})
-	}
+	// Serve static files from the "./static" directory for the root path "/"
+	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static/"))))
 
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	// Start the server
+	fmt.Println("Server started at http://localhost:8080")
+	err = http.ListenAndServe(":8080", router)
 
-	http.HandleFunc("/link", generateQRCode)
-
-	http.HandleFunc("/api/users", getDevices)
-	http.HandleFunc("/api/chat", chatHandler)
-	http.HandleFunc("/api/all-chats", allChatsHandler)
-
-	port := "8080"
-	fmt.Println("Server running on port", port)
-	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
-		fmt.Println("Failed to start server:", err)
-		os.Exit(1)
+		log.Fatalf("Failed to start server: %v", err)
 	}
-
-	select {}
 }

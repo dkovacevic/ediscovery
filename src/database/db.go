@@ -1,8 +1,10 @@
-package main
+package database
 
 import (
 	"database/sql"
 	"fmt"
+	//"lh-whatsapp/src"
+	"lh-whatsapp/src/models"
 )
 
 import (
@@ -14,18 +16,7 @@ type DB struct {
 	Conn *sql.DB
 }
 
-type ChatMessage struct {
-	SenderName string `json:"sender"`
-	Text       string `json:"text"`
-	SentDate   string `json:"date"`
-}
-
-// Chat represents a single chat overview
-type Chat struct {
-	ChatID       string `json:"chatId"`
-	GroupName    string `json:"groupName"`
-	Participants string `json:"participants"` // Ensure this is an array of strings
-}
+var Db *DB
 
 // NewDB creates a new database connection
 func NewDB(dataSourceName string) (*DB, error) {
@@ -58,7 +49,7 @@ func NewDB(dataSourceName string) (*DB, error) {
 }
 
 // InsertKibana inserts a Kibana object into the database
-func (db *DB) InsertKibana(k Kibana) error {
+func (db *DB) InsertKibana(k models.Kibana) error {
 	insertQuery := `
 	INSERT INTO legalhold (lhid, messageId, chatId, sent, sender, text, senderId, mediaType, groupName, participants)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
@@ -71,17 +62,17 @@ func (db *DB) InsertKibana(k Kibana) error {
 	return nil
 }
 
-// Fetch chat messages based on lhid and chatid
-func (db *DB) fetchChat(lhid, chatid string) ([]ChatMessage, error) {
+// FetchChat Fetch chat messages based on lhid and chatid
+func (db *DB) FetchChat(lhid, chatid string) ([]models.ChatMessage, error) {
 	query := `SELECT sender, text, sent FROM legalhold WHERE lhid = ? AND chatId = ? ORDER BY sent`
 	rows, err := db.Conn.Query(query, lhid, chatid)
 	if err != nil {
 		return nil, err
 	}
 
-	var messages []ChatMessage
+	var messages []models.ChatMessage
 	for rows.Next() {
-		var message ChatMessage
+		var message models.ChatMessage
 		if err := rows.Scan(&message.SenderName, &message.Text, &message.SentDate); err != nil {
 			return nil, err
 		}
@@ -95,18 +86,23 @@ func (db *DB) fetchChat(lhid, chatid string) ([]ChatMessage, error) {
 	return messages, nil
 }
 
-// Fetch all chats for a given lhid
-func (db *DB) fetchAllChats(lhid string) ([]Chat, error) {
+// FetchAllChats Fetch all chats for a given lhid
+func (db *DB) FetchAllChats(lhid string) ([]models.Chat, error) {
 	query := `SELECT chatId, groupName, participants FROM legalhold WHERE lhid = ? GROUP BY chatId`
 	rows, err := db.Conn.Query(query, lhid)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
 
-	var chats []Chat
+		}
+	}(rows)
+
+	var chats []models.Chat
 	for rows.Next() {
-		var chat Chat
+		var chat models.Chat
 		if err := rows.Scan(&chat.ChatID, &chat.GroupName, &chat.Participants); err != nil {
 			return nil, err
 		}

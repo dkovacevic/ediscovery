@@ -1,14 +1,16 @@
 // qrcode.go
-package main
+package handlers
 
 import (
 	"bytes"
 	"context"
 	"fmt"
 	"github.com/mdp/qrterminal"
+	"go.mau.fi/whatsmeow"
 	waLog "go.mau.fi/whatsmeow/util/log"
 	"html/template"
 	"io/ioutil"
+	"lh-whatsapp/src/meow"
 	"net/http"
 )
 
@@ -17,11 +19,11 @@ type QRData struct {
 	QRCode string
 }
 
-func generateQRCode(w http.ResponseWriter, _ *http.Request) {
-	deviceStore := container.NewDevice()
+func GenerateQRCode(w http.ResponseWriter, _ *http.Request) {
+	deviceStore := meow.Container.NewDevice()
 
 	clientLog := waLog.Stdout("Client", "INFO", true)
-	client := initializeClient(deviceStore, clientLog)
+	client := whatsmeow.NewClient(deviceStore, clientLog)
 
 	// Get the QR code event channel, this handles its own timeout internally
 	qrChan, err := client.GetQRChannel(context.Background())
@@ -37,7 +39,7 @@ func generateQRCode(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	client.AddEventHandler(func(evt interface{}) {
-		eventHandler(client, evt)
+		meow.EventHandler(client, evt)
 	})
 
 	// Start a goroutine to handle events after sending the QR code
