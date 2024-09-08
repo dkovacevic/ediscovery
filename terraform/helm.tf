@@ -30,3 +30,11 @@ resource "helm_release" "cert_manager" {
 
   depends_on = [module.eks]
 }
+
+# Data source to find the Kubernetes Service for ingress-nginx-controller
+data "kubernetes_service" "nginx_ingress_controller" {
+  metadata {
+    name      = "ingress-nginx-controller"
+    namespace = "ingress-nginx"
+  }
+}
