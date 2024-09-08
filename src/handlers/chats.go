@@ -18,7 +18,7 @@ func GetChats(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	chats, err := database.Db.FetchAllChats(lhid)
+	chats, err := database.FetchAllChats(lhid)
 	if err != nil {
 		http.Error(w, "Unable to fetch chats", http.StatusInternalServerError)
 		return

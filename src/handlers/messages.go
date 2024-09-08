@@ -14,7 +14,7 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 	lhid := vars["lhid"]
 	chatId := vars["chatID"]
 
-	messages, err := database.Db.FetchChat(lhid, chatId)
+	messages, err := database.FetchChat(lhid, chatId)
 	if err != nil {
 		http.Error(w, "Unable to fetch chat", http.StatusInternalServerError)
 		return
