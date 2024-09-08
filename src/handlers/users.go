@@ -9,7 +9,7 @@ import (
 
 func GetUsers(writer http.ResponseWriter, _ *http.Request) {
 	// Get all devices from the container
-	devices, err := meow.Container.GetAllDevices()
+	devices, err := meow.GetAllDevices()
 	if err != nil {
 		http.Error(writer, "Unable to fetch devices", http.StatusInternalServerError)
 		return

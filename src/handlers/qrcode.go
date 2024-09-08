@@ -20,7 +20,7 @@ type QRData struct {
 }
 
 func GenerateQRCode(w http.ResponseWriter, _ *http.Request) {
-	deviceStore := meow.Container.NewDevice()
+	deviceStore := meow.NewDevice()
 
 	clientLog := waLog.Stdout("Client", "INFO", true)
 	client := whatsmeow.NewClient(deviceStore, clientLog)

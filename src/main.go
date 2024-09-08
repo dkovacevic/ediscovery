@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
-	"go.mau.fi/whatsmeow/store/sqlstore"
-	waLog "go.mau.fi/whatsmeow/util/log"
 	"lh-whatsapp/src/database"
 	"lh-whatsapp/src/handlers"
 	"lh-whatsapp/src/meow"
@@ -15,21 +13,13 @@ import (
 )
 
 func main() {
-	dbLog := waLog.Stdout("Database", "INFO", true)
-
 	// Initialize the database connection
-	var err error
-	meow.Container, err = sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
-	if err != nil {
-		panic(err)
-	}
-
-	database.Db, err = database.NewDB("device.db")
+	err := database.NewDB("device.db")
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	err = meow.InitWhatsAppClients()
+	_, err = meow.InitWhatsAppClients()
 	if err != nil {
 		log.Fatalf("Failed to Init WhatsApp clients: %v", err)
 	}

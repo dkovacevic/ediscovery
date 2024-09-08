@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	//"lh-whatsapp/src"
 	"lh-whatsapp/src/models"
 )
 
@@ -11,18 +10,18 @@ import (
 	_ "github.com/mattn/go-sqlite3" // SQLite driver
 )
 
-// DB represents the database connection
-type DB struct {
+// Database represents the database connection
+type Database struct {
 	Conn *sql.DB
 }
 
-var Db *DB
+var database *Database
 
 // NewDB creates a new database connection
-func NewDB(dataSourceName string) (*DB, error) {
+func NewDB(dataSourceName string) error {
 	conn, err := sql.Open("sqlite3", dataSourceName)
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("failed to open the db: %w", err)
 	}
 
 	// Create the Kibana table if it doesn't exist
@@ -42,19 +41,20 @@ func NewDB(dataSourceName string) (*DB, error) {
 
 	_, err = conn.Exec(createTableQuery)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create table: %w", err)
+		return fmt.Errorf("failed to create table: %w", err)
 	}
 
-	return &DB{Conn: conn}, nil
+	database = &Database{Conn: conn}
+	return nil
 }
 
 // InsertKibana inserts a Kibana object into the database
-func (db *DB) InsertKibana(k models.Kibana) error {
+func InsertKibana(k models.Kibana) error {
 	insertQuery := `
 	INSERT INTO legalhold (lhid, messageId, chatId, sent, sender, text, senderId, mediaType, groupName, participants)
 	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
 
-	_, err := db.Conn.Exec(insertQuery, k.LHID, k.ID, k.ChatID, k.Sent, k.Sender, k.Text, k.From, k.Type, k.Group, k.Participants)
+	_, err := database.Conn.Exec(insertQuery, k.LHID, k.ID, k.ChatID, k.Sent, k.Sender, k.Text, k.From, k.Type, k.Group, k.Participants)
 	if err != nil {
 		return fmt.Errorf("failed to insert kibana record: %w", err)
 	}
@@ -63,9 +63,9 @@ func (db *DB) InsertKibana(k models.Kibana) error {
 }
 
 // FetchChat Fetch chat messages based on lhid and chatid
-func (db *DB) FetchChat(lhid, chatid string) ([]models.ChatMessage, error) {
+func FetchChat(lhid, chatid string) ([]models.ChatMessage, error) {
 	query := `SELECT sender, text, sent FROM legalhold WHERE lhid = ? AND chatId = ? ORDER BY sent`
-	rows, err := db.Conn.Query(query, lhid, chatid)
+	rows, err := database.Conn.Query(query, lhid, chatid)
 	if err != nil {
 		return nil, err
 	}
@@ -87,9 +87,9 @@ func (db *DB) FetchChat(lhid, chatid string) ([]models.ChatMessage, error) {
 }
 
 // FetchAllChats Fetch all chats for a given lhid
-func (db *DB) FetchAllChats(lhid string) ([]models.Chat, error) {
+func FetchAllChats(lhid string) ([]models.Chat, error) {
 	query := `SELECT chatId, groupName, participants FROM legalhold WHERE lhid = ? GROUP BY chatId`
-	rows, err := db.Conn.Query(query, lhid)
+	rows, err := database.Conn.Query(query, lhid)
 	if err != nil {
 		return nil, err
 	}
