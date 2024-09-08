@@ -1,9 +1,10 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
+	"lh-whatsapp/src/database"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 	lhid := vars["lhid"]
 	chatId := vars["chatID"]
 
-	messages, err := Db.FetchChat(lhid, chatId)
+	messages, err := database.Db.FetchChat(lhid, chatId)
 	if err != nil {
 		http.Error(w, "Unable to fetch chat", http.StatusInternalServerError)
 		return

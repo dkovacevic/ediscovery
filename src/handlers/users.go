@@ -1,30 +1,26 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
+	"lh-whatsapp/src/meow"
+	"lh-whatsapp/src/models"
 	"net/http"
 )
 
-type Device struct {
-	JID    string `json:"jid"`
-	Name   string `json:"name"`
-	Device string `json:"device"`
-}
-
 func GetUsers(writer http.ResponseWriter, _ *http.Request) {
 	// Get all devices from the container
-	devices, err := Container.GetAllDevices()
+	devices, err := meow.Container.GetAllDevices()
 	if err != nil {
 		http.Error(writer, "Unable to fetch devices", http.StatusInternalServerError)
 		return
 	}
 
 	// Prepare a slice to hold the device details
-	var deviceDetails []Device
+	var deviceDetails []models.User
 
 	// Iterate over the devices and populate the device details slice
 	for _, deviceStore := range devices {
-		deviceDetails = append(deviceDetails, Device{
+		deviceDetails = append(deviceDetails, models.User{
 			JID:    deviceStore.ID.User,
 			Name:   deviceStore.PushName,
 			Device: deviceStore.Platform,
