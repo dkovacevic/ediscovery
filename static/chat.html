@@ -19,7 +19,7 @@
         .chat-message .text {
             margin: 5px 0;
         }
-        .chat-message .sent-date {
+        .chat-message .date {
             font-size: 0.8em;
             color: #666;
         }
@@ -27,17 +27,6 @@
 </head>
 <body>
 <h1>WhatsApp Chat</h1>
-
-<!-- Form to input LHID and ChatID -->
-<form id="chatForm">
-    <label for="lhid">LHID:</label>
-    <input type="text" id="lhid" name="lhid" required>
-    <br>
-    <label for="chatid">ChatID:</label>
-    <input type="text" id="chatid" name="chatid" required>
-    <br>
-    <button type="submit">Fetch Chat</button>
-</form>
 
 <!-- Div where chat messages will be rendered -->
 <div id="chat-messages">

@@ -1,47 +1,53 @@
-document.addEventListener("DOMContentLoaded", function() {
-    // Add event listener to the form
-    document.getElementById("chatForm").addEventListener("submit", function(e) {
-        e.preventDefault(); // Prevent default form submission behavior
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const chatId = params.get('chatid');
+    const lhid = params.get('lhid');
 
-        const lhid = document.getElementById("lhid").value;
-        const chatid = document.getElementById("chatid").value;
-
-        // Fetch chat messages using the provided lhid and chatid
-        fetchChatMessages(lhid, chatid);
-    });
+    if (chatId && lhid) {
+        fetchChatMessages(chatId, lhid);
+    } else {
+        console.error('ChatID or LHID not provided');
+    }
 });
 
-// Function to fetch chat messages from the REST API
-function fetchChatMessages(lhid, chatid) {
-    fetch(`/api/chat?lhid=${lhid}&chatid=${chatid}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // Expecting a JSON response
-        })
+function fetchChatMessages(chatId, lhid) {
+    fetch(`/api/chat?chatid=${encodeURIComponent(chatId)}&lhid=${encodeURIComponent(lhid)}`)
+        .then(response => response.json())
         .then(data => {
-            renderChatMessages(data);
+            displayChatMessages(data);
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            console.error('Error fetching chat messages:', error);
         });
 }
 
-// Function to render chat messages into HTML
-function renderChatMessages(messages) {
-    const chatMessagesDiv = document.getElementById("chat-messages");
-    chatMessagesDiv.innerHTML = ""; // Clear previous content
+function displayChatMessages(messages) {
+    const chatMessagesDiv = document.getElementById('chat-messages');
+
+    if (!chatMessagesDiv) {
+        console.error('Chat messages container not found');
+        return;
+    }
 
     messages.forEach(message => {
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("chat-message");
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message';
 
-        messageDiv.innerHTML = `
-            <div class="sender">${message.SenderName}</div>
-            <div class="text">${message.Text}</div>
-            <div class="sent-date">${message.SentDate}</div>
-        `;
+        const senderDiv = document.createElement('div');
+        senderDiv.className = 'sender';
+        senderDiv.textContent = message.sender;
+
+        const textDiv = document.createElement('div');
+        textDiv.className = 'text';
+        textDiv.textContent = message.text;
+
+        const sentDateDiv = document.createElement('div');
+        sentDateDiv.className = 'date';
+        sentDateDiv.textContent = message.date;
+
+        messageDiv.appendChild(senderDiv);
+        messageDiv.appendChild(textDiv);
+        messageDiv.appendChild(sentDateDiv);
 
         chatMessagesDiv.appendChild(messageDiv);
     });
