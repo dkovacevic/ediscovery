@@ -1,19 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded and parsed');
-
-    // Check if URLSearchParams is supported
-    if (window.URLSearchParams) {
-        const params = new URLSearchParams(window.location.search);
-        const lhid = params.get('lhid');
-
-        if (lhid) {
-            fetchChatData(lhid);
-        } else {
-            console.error('LHID not provided');
-        }
-    } else {
-        console.error('URLSearchParams is not supported in this browser');
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    const lhid = params.get('lhid');
+    const name = params.get('name');
+    document.getElementById('name').textContent = decodeURIComponent(name);
+    fetchChatData(lhid);
 });
 
 function fetchChatData(lhid) {

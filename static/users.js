@@ -27,7 +27,7 @@ function populateTable(data) {
         // Create a table cell for JID and make it a hyperlink
         const jidCell = document.createElement('td');
         const jidLink = document.createElement('a');
-        jidLink.href = `/all_chats.html?lhid=${item.jid}`;  // Create hyperlink with lhid as query parameter
+        jidLink.href = `/all_chats.html?lhid=${encodeURIComponent(item.jid)}&name=${encodeURIComponent(item.name)}`;
         jidLink.textContent = item.jid;
         jidCell.appendChild(jidLink);  // Append the link to the cell
         row.appendChild(jidCell);
