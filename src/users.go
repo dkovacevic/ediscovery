@@ -11,9 +11,9 @@ type Device struct {
 	Device string `json:"device"`
 }
 
-func getDevices(writer http.ResponseWriter, _ *http.Request) {
+func GetUsers(writer http.ResponseWriter, _ *http.Request) {
 	// Get all devices from the container
-	devices, err := container.GetAllDevices()
+	devices, err := Container.GetAllDevices()
 	if err != nil {
 		http.Error(writer, "Unable to fetch devices", http.StatusInternalServerError)
 		return

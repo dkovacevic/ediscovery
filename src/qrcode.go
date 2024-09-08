@@ -18,7 +18,7 @@ type QRData struct {
 }
 
 func generateQRCode(w http.ResponseWriter, _ *http.Request) {
-	deviceStore := container.NewDevice()
+	deviceStore := Container.NewDevice()
 
 	clientLog := waLog.Stdout("Client", "INFO", true)
 	client := initializeClient(deviceStore, clientLog)

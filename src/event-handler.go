@@ -63,7 +63,7 @@ func eventHandler(client *whatsmeow.Client, evt interface{}) {
 }
 
 func storeDB(kibana Kibana) {
-	err := db.InsertKibana(kibana)
+	err := Db.InsertKibana(kibana)
 	if err != nil {
 		log.Fatalf("failed to insert kibana record: %v", err)
 	}

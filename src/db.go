@@ -24,8 +24,10 @@ type ChatMessage struct {
 type Chat struct {
 	ChatID       string `json:"chatId"`
 	GroupName    string `json:"groupName"`
-	Participants string `json:"participants"` // Ensure this is an array of strings
+	Participants string `json:"participants"`
 }
+
+var Db *DB
 
 // NewDB creates a new database connection
 func NewDB(dataSourceName string) (*DB, error) {
@@ -71,8 +73,8 @@ func (db *DB) InsertKibana(k Kibana) error {
 	return nil
 }
 
-// Fetch chat messages based on lhid and chatid
-func (db *DB) fetchChat(lhid, chatid string) ([]ChatMessage, error) {
+// FetchChat Fetch chat messages based on lhid and chatid
+func (db *DB) FetchChat(lhid, chatid string) ([]ChatMessage, error) {
 	query := `SELECT sender, text, sent FROM legalhold WHERE lhid = ? AND chatId = ? ORDER BY sent`
 	rows, err := db.Conn.Query(query, lhid, chatid)
 	if err != nil {
@@ -95,8 +97,8 @@ func (db *DB) fetchChat(lhid, chatid string) ([]ChatMessage, error) {
 	return messages, nil
 }
 
-// Fetch all chats for a given lhid
-func (db *DB) fetchAllChats(lhid string) ([]Chat, error) {
+// FetchAllChats Fetch all chats for a given lhid
+func (db *DB) FetchAllChats(lhid string) ([]Chat, error) {
 	query := `SELECT chatId, groupName, participants FROM legalhold WHERE lhid = ? GROUP BY chatId`
 	rows, err := db.Conn.Query(query, lhid)
 	if err != nil {
