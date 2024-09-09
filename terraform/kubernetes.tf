@@ -100,6 +100,7 @@ resource "kubernetes_manifest" "letsencrypt_cluster_issuer" {
       }
     }
   }
+  depends_on = [module.eks]
 }
 
 resource "kubernetes_manifest" "orion_ingress" {

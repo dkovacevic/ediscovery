@@ -38,3 +38,12 @@ type Kibana struct {
 	Group        string `json:"group"`
 	Participants string `json:"participants"`
 }
+
+type PaginatedResponse struct {
+	Page       int `json:"page"`
+	Limit      int `json:"limit"`
+	Total      int `json:"total"`
+	TotalPages int `json:"total_pages"`
+
+	Messages []ChatMessage `json:"messages"`
+}

@@ -7,30 +7,85 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #chat-container {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
         .chat-message {
             padding: 10px;
             margin-bottom: 10px;
             border-bottom: 1px solid #ddd;
         }
+
         .chat-message .sender {
             font-weight: bold;
         }
+
         .chat-message .text {
             margin: 5px 0;
         }
+
         .chat-message .date {
             font-size: 0.8em;
             color: #666;
         }
+
+        #pagination {
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        #pagination button {
+            margin: 0 5px;
+        }
+
+        #page-info {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        /* Styling for the back link */
+        #back-link {
+            margin: 20px;
+        }
     </style>
 </head>
 <body>
-<h1>WhatsApp Chat</h1>
 
-<!-- Div where chat messages will be rendered -->
-<div id="chat-messages">
-    <!-- Chat messages will be dynamically injected here -->
+<div id="container">
+    <h1>WhatsApp Chat</h1>
+
+    <!-- Back link to the users page -->
+    <div id="back-link">
+        <a href="users.html">← Back to Users</a>
+    </div>
+
+    <!-- Chat messages container -->
+    <div id="chat-container">
+        <div id="chat-messages">
+            <!-- Chat messages will be dynamically injected here -->
+        </div>
+    </div>
+
+    <!-- Pagination controls -->
+    <div id="pagination">
+        <button id="prev-page">Previous</button>
+        <span id="page-info">Page 1</span>
+        <button id="next-page">Next</button>
+    </div>
 </div>
 
 <script src="scripts/messages.js"></script> <!-- Include external JavaScript file -->

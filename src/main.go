@@ -29,7 +29,7 @@ func main() {
 	// Define the API routes
 	router.HandleFunc("/api/users", handlers.GetUsers).Methods("GET")
 	router.HandleFunc("/api/{lhid}/chats", handlers.GetChats).Methods("GET")
-	router.HandleFunc("/api/{lhid}/chats/{chatID}/messages", handlers.GetMessages).Methods("GET")
+	router.HandleFunc("/api/{lhid}/chats/{chatid}/messages", handlers.GetMessages).Methods("GET")
 
 	// Handle the "/link" route separately
 	router.HandleFunc("/link", handlers.GenerateQRCode).Methods("GET")
