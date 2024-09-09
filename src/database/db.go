@@ -86,6 +86,34 @@ func FetchChat(lhid, chatid string) ([]models.ChatMessage, error) {
 	return messages, nil
 }
 
+// FetchPaginatedChat returns a paginated list of messages for the given lhid and chatId
+func FetchPaginatedChat(lhid string, chatId string, page int, limit int) ([]models.ChatMessage, error) {
+	offset := (page - 1) * limit
+
+	query := `
+		SELECT sender, text, sent FROM legalhold
+		WHERE lhid = ? AND chatId = ?
+		ORDER BY sent DESC
+		LIMIT ? OFFSET ?
+	`
+	rows, err := database.Conn.Query(query, lhid, chatId, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var messages []models.ChatMessage
+	for rows.Next() {
+		var message models.ChatMessage
+		if err := rows.Scan(&message.SenderName, &message.Text, &message.SentDate); err != nil {
+			return nil, err
+		}
+		messages = append(messages, message)
+	}
+
+	return messages, nil
+}
+
 // FetchAllChats Fetch all chats for a given lhid
 func FetchAllChats(lhid string) ([]models.Chat, error) {
 	query := `SELECT chatId, groupName, participants FROM legalhold WHERE lhid = ? GROUP BY chatId`
@@ -114,4 +142,18 @@ func FetchAllChats(lhid string) ([]models.Chat, error) {
 	}
 
 	return chats, nil
+}
+
+// FetchTotalMessagesCount returns the total number of messages for the given lhid and chatId
+func FetchTotalMessagesCount(lhid string, chatId string) (int, error) {
+	query := `
+		SELECT COUNT(*) FROM legalhold
+		WHERE lhid = ? AND chatId = ?
+	`
+	var count int
+	err := database.Conn.QueryRow(query, lhid, chatId).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
 }

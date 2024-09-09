@@ -37,4 +37,5 @@ data "kubernetes_service" "nginx_ingress_controller" {
     name      = "ingress-nginx-controller"
     namespace = "ingress-nginx"
   }
+  depends_on = [helm_release.nginx_ingress]
 }
