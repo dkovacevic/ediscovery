@@ -5,37 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Chats</title>
     <style>
+        /* General body styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Main heading */
+        h1 {
+            color: #343a40;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Container for table and link */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for the link back to the users page */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
+            border: 1px solid #dee2e6;
             text-align: left;
         }
 
         th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+            th, td {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
-<h1>All Chats for <span id="name"></span></h1>
-<table id="chatsTable">
-    <thead>
-    <tr>
-        <th>Chat ID</th>
-        <th>Group Name</th>
-        <th>Participants</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Data will be populated here by JavaScript -->
-    </tbody>
-</table>
 
+<div class="container">
+    <!-- Link to go back to the user list -->
+    <a class="back-link" href="users.html">&larr; Back to Tracked Users</a>
+
+    <h1>All Chats for <span id="name"></span></h1>
+
+    <table id="chatsTable">
+        <thead>
+        <tr>
+            <th>Chat ID</th>
+            <th>Group Name</th>
+            <th>Participants</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Data will be populated here by JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<!-- External script for populating data -->
 <script src="scripts/chats.js"></script>
 </body>
 </html>

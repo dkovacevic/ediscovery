@@ -6,31 +6,66 @@
     <title>WhatsApp Chat</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e5ddd5;
             margin: 0;
             padding: 0;
-        }
-
-        #container {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        #chat-container {
-            flex-grow: 1;
-            padding: 20px;
-            overflow-y: auto;
+        h1 {
+            background-color: #075e54;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
         }
 
-        .chat-message {
+        /* Container for chat and pagination */
+        #container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Chat container to hold messages */
+        #chat-container {
+            flex-grow: 1;
             padding: 10px;
+            overflow-y: auto;
+            background-color: #efeae2;
+            display: flex;
+            flex-direction: column-reverse; /* So the latest messages appear at the bottom */
+        }
+
+        /* Chat message styling */
+        .chat-message {
+            max-width: 70%;
             margin-bottom: 10px;
-            border-bottom: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 10px;
+            line-height: 1.4;
+            position: relative;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        /* Styling for messages sent by the user */
+        .sent {
+            align-self: flex-end;
+            background-color: #dcf8c6;
+        }
+
+        /* Styling for messages received */
+        .received {
+            align-self: flex-start;
         }
 
         .chat-message .sender {
             font-weight: bold;
+            margin-bottom: 5px;
         }
 
         .chat-message .text {
@@ -38,18 +73,34 @@
         }
 
         .chat-message .date {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: #666;
+            position: absolute;
+            right: 10px;
+            bottom: 5px;
         }
 
+        /* Pagination controls */
         #pagination {
-            padding: 20px;
+            padding: 10px;
             text-align: center;
-            background-color: #f0f0f0;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
         }
 
         #pagination button {
             margin: 0 5px;
+            padding: 8px 16px;
+            border: none;
+            background-color: #075e54;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
 
         #page-info {
@@ -57,22 +108,42 @@
             font-weight: bold;
         }
 
-        /* Styling for the back link */
+        /* Back link styling */
         #back-link {
-            margin: 20px;
+            margin: 15px;
+            text-align: center;
+        }
+
+        #back-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        #back-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .chat-message {
+                max-width: 90%;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
 
+<!-- Header -->
+<h1>WhatsApp Chat</h1>
+
+<!-- Back link to the chats page -->
+<div id="back-link">
+    <a href="chats.html">← Back to Chats</a>
+</div>
+
+<!-- Main container for chat messages and pagination -->
 <div id="container">
-    <h1>WhatsApp Chat</h1>
-
-    <!-- Back link to the users page -->
-    <div id="back-link">
-        <a href="users.html">← Back to Users</a>
-    </div>
-
     <!-- Chat messages container -->
     <div id="chat-container">
         <div id="chat-messages">
@@ -88,6 +159,6 @@
     </div>
 </div>
 
-<script src="scripts/messages.js"></script> <!-- Include external JavaScript file -->
+<script src="scripts/messages.js"></script> <!-- External JavaScript to handle chat data -->
 </body>
 </html>
