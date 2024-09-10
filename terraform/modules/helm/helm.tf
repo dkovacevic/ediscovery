@@ -11,8 +11,6 @@ resource "helm_release" "nginx_ingress" {
   chart      = "ingress-nginx"
   namespace  = "ingress-nginx"
   create_namespace = true
-
-  depends_on = [module.eks]
 }
 
 # Install cert-manager using Helm
@@ -27,15 +25,4 @@ resource "helm_release" "cert_manager" {
     name  = "crds.enabled"
     value = "true"
   }
-
-  depends_on = [module.eks]
-}
-
-# Data source to find the Kubernetes Service for ingress-nginx-controller
-data "kubernetes_service" "nginx_ingress_controller" {
-  metadata {
-    name      = "ingress-nginx-controller"
-    namespace = "ingress-nginx"
-  }
-  depends_on = [helm_release.nginx_ingress]
 }
