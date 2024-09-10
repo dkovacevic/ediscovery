@@ -1,7 +1,5 @@
 data "aws_eks_cluster" "cluster" {
   name = var.cluster_name
-  depends_on = [
-    module.eks]
 }
 
 provider "kubernetes" {
@@ -100,7 +98,6 @@ resource "kubernetes_manifest" "letsencrypt_cluster_issuer" {
       }
     }
   }
-  depends_on = [module.eks]
 }
 
 resource "kubernetes_manifest" "orion_ingress" {
