@@ -3,37 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eDiscovery Hope Page</title>
+    <title>eDiscovery for Instant Messengers</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        h1 {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e5ddd5;
+            margin: 0;
+            padding: 0;
             color: #333;
+            line-height: 1.6;
         }
-        a {
-            text-decoration: none;
+        header {
+            background-color: #075e54;
+            padding: 20px;
+            text-align: center;
             color: white;
-            background-color: #007bff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 16px;
         }
-        a:hover {
-            background-color: #0056b3;
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 50px 10%;
+        }
+        .text-content {
+            max-width: 600px;
+        }
+        .text-content h2 {
+            color: #075e54;
+        }
+        .text-content p {
+            margin: 20px 0;
+        }
+        .cta {
+            margin-top: 30px;
+        }
+        .cta a {
+            text-decoration: none;
+            background-color: #25d366;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+        .cta a:hover {
+            background-color: #1ebe5b;
+        }
+        .image-content img {
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #075e54;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
 
-<h1>Welcome to the Legal Hold Dashboard</h1>
-<a href="users.html">Go to Users Page</a>
-<a href="/link">QR Code:  Onboard new employee</a>
+<header>
+    <h1>eDiscovery for Instant Messaging</h1>
+</header>
+
+<div class="content">
+    <div class="text-content">
+        <h2>Why eDiscovery is Essential for Compliance</h2>
+        <p>In today's digital age, instant messaging platforms like WhatsApp have become integral communication tools for businesses. However, this convenience comes with its own set of challenges, especially when it comes to legal compliance and data security.</p>
+        <p>eDiscovery ensures that companies can securely capture, store, and retrieve conversations from instant messengers. This is critical for businesses looking to stay compliant with regulatory requirements such as GDPR, HIPAA, and other industry-specific regulations.</p>
+        <p>By having an eDiscovery solution, organizations can mitigate risks, avoid legal penalties, and maintain transparency in their communication processes. Don’t let important information get lost—stay compliant and protect your business today.</p>
+        <div class="cta">
+            <a href="users.html">Go to Users Page</a>
+            <a href="/link" style="margin-left: 10px;">QR Code: Onboard New Employee</a>
+        </div>
+    </div>
+    <div class="image-content">
+        <img src="./img/manager.jpg" alt="People using mobile phones">
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Your Company. All Rights Reserved.</p>
+</footer>
 
 </body>
 </html>

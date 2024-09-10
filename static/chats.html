@@ -5,36 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Chats</title>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e5ddd5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+        h1 {
+            background-color: #075e54;
+            color: white;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        /* Container for the page */
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
         }
 
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
             text-align: left;
         }
 
         th {
+            background-color: #075e54;
+            color: white;
+        }
+
+        tr:nth-child(even) {
             background-color: #f2f2f2;
+        }
+
+        /* Link styling */
+        a {
+            color: #25d366;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Navigation links */
+        .nav-links {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .nav-links a {
+            margin: 0 15px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+            th, td {
+                padding: 10px;
+            }
         }
     </style>
 </head>
 <body>
+
 <h1>All Chats for <span id="name"></span></h1>
-<table id="chatsTable">
-    <thead>
-    <tr>
-        <th>Chat ID</th>
-        <th>Group Name</th>
-        <th>Participants</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Data will be populated here by JavaScript -->
-    </tbody>
-</table>
+
+<div class="container">
+    <!-- Navigation links -->
+    <div class="nav-links">
+        <a href="index.html">← Back to Home</a> |
+        <a href="users.html">Back to Users</a>
+    </div>
+
+    <!-- Chats table -->
+    <table id="chatsTable">
+        <thead>
+        <tr>
+            <th>Chat ID</th>
+            <th>Group Name</th>
+            <th>Participants</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Data will be populated here by JavaScript -->
+        </tbody>
+    </table>
+</div>
 
 <script src="scripts/chats.js"></script>
 </body>

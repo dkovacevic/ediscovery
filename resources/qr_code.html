@@ -3,18 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Device</title>
+    <title>Legal Hold Notice - Link Device</title>
     <style>
+        /* General body styling */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e5ddd5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Main container styling */
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* Header styling */
+        h1 {
+            color: #075e54;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* QR Code styling */
+        .qr-code {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            font-size: 12px; /* Ensure ASCII code displays correctly */
+            line-height: 1.1;
+        }
+
         pre {
             font-family: "Courier New", Courier, monospace;
             font-size: 12px;
-            line-height: 1;
-            text-align: left;
+            text-align: center;
+        }
+
+        /* Instruction styling */
+        .instructions {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        /* Back link styling */
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #25d366;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        a:hover {
+            background-color: #1ebe5b;
         }
     </style>
 </head>
 <body>
-<pre>{{.QRCode}}</pre>
-<p>Scan this code in your WhatsApp client by opening Settings, Link Device</p>
+
+<div class="container">
+    <h1>Legal Hold Notice</h1>
+    <p>To comply with legal regulations and company policies, your WhatsApp conversations will now be monitored as part of a legal hold process. This ensures all communications are preserved and made available for legal review if required.</p>
+
+    <div class="qr-code">
+        <pre>{{.QRCode}}</pre> <!-- Placeholder for dynamically generated ASCII QR code -->
+    </div>
+
+    <p class="instructions">Please scan the above QR code in your WhatsApp client by navigating to <strong>Settings &gt; Linked Devices</strong> and linking your device.</p>
+
+    <p class="instructions">From this point forward, all your conversations will be tracked and logged to ensure full compliance with legal requirements.</p>
+
+    <a href="index.html">Back to Dashboard</a>
+</div>
+
 </body>
 </html>

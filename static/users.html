@@ -3,44 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tracked Users</title>
+    <title>Legal Hold Dashboard</title>
     <style>
+        /* General body styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e5ddd5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styles */
+        header {
+            background-color: #075e54;
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        /* Main container styling */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Back link styling */
+        .back-links {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .back-links a {
+            color: #25d366;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .back-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Onboard New User Button */
+        .onboard-btn {
+            background-color: #075e54;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .onboard-btn:hover {
+            background-color: #1ebe5b;
+        }
+
+        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
+
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 15px;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
+
         th {
+            background-color: #075e54;
+            color: white;
+        }
+
+        tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
+        /* Link styles inside table */
         a {
+            color: #25d366;
             text-decoration: none;
-            color: #007bff;
         }
+
         a:hover {
             text-decoration: underline;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #075e54;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 40px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.9rem;
+            }
+            th, td {
+                padding: 12px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-<h1>Tracked Users</h1>
-<table id="jidTable">
-    <thead>
-    <tr>
-        <th>JID</th>
-        <th>Name</th>
-        <th>Device</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Data will be populated here by JavaScript -->
-    </tbody>
-</table>
 
+<header>
+    <h1>Legal Hold Dashboard</h1>
+</header>
+
+<div class="container">
+    <div class="back-links">
+        <a href="index.html">&larr; Back to Homepage</a>
+        <a href="users.html">&larr; Back to Users</a>
+        <a href="/link" class="onboard-btn">Onboard New User</a>
+    </div>
+
+    <h2>Tracked Users</h2>
+
+    <table id="jidTable">
+        <thead>
+        <tr>
+            <th>JID</th>
+            <th>Name</th>
+            <th>Device</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Data will be populated here by JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<footer>
+    <p>&copy; 2024 Your Company. All rights reserved.</p>
+</footer>
+
+<!-- External script for populating data -->
 <script src="scripts/users.js"></script>
 </body>
 </html>
