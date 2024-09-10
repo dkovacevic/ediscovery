@@ -1,0 +1,3 @@
+terraform destroy -target=module.lh_kubernetes -auto-approve
+terraform destroy -target=module.ingress_helm -auto-approve
+terraform destroy -auto-approve

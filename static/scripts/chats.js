@@ -19,6 +19,7 @@ function fetchChatData(lhid) {
 
 function populateChatsTable(data, lhid) {
     const tableBody = document.querySelector('#chatsTable tbody');
+    const name = document.getElementById('name').textContent
 
     if (!tableBody) {
         console.error('Table body not found');
@@ -31,7 +32,7 @@ function populateChatsTable(data, lhid) {
         // Create a hyperlink for chatId
         const chatIdCell = document.createElement('td');
         const chatIdLink = document.createElement('a');
-        chatIdLink.href = `messages.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}`;
+        chatIdLink.href = `messages.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}&name=${encodeURIComponent(name)}`;
         chatIdLink.textContent = item.chatId;
         chatIdCell.appendChild(chatIdLink);
         row.appendChild(chatIdCell);
