@@ -13,34 +13,43 @@
             color: #333;
             line-height: 1.6;
         }
+
         header {
             background-color: #075e54;
             padding: 20px;
             text-align: center;
             color: white;
         }
+
         header h1 {
             margin: 0;
-            font-size: 2.5em;
+            font-size: 2em;
         }
+
         .content {
             display: flex;
+            flex-direction: row;
             justify-content: space-around;
             align-items: center;
             padding: 50px 10%;
         }
+
         .text-content {
             max-width: 600px;
         }
+
         .text-content h2 {
             color: #075e54;
         }
+
         .text-content p {
             margin: 20px 0;
         }
+
         .cta {
             margin-top: 30px;
         }
+
         .cta a {
             text-decoration: none;
             background-color: #25d366;
@@ -48,21 +57,56 @@
             padding: 15px 30px;
             border-radius: 5px;
             font-size: 18px;
+            display: inline-block;
         }
+
         .cta a:hover {
             background-color: #1ebe5b;
         }
+
         .image-content img {
-            max-width: 500px;
+            max-width: 100%;
+            height: auto;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         footer {
             background-color: #075e54;
             padding: 10px;
             text-align: center;
             color: white;
             margin-top: 50px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                flex-direction: column;
+                padding: 30px 5%;
+            }
+
+            .text-content, .image-content {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .text-content h2 {
+                font-size: 1.5em;
+            }
+
+            .cta a {
+                font-size: 16px;
+                padding: 12px 20px;
+                margin-bottom: 10px;
+                display: block;
+                width: auto;
+                margin: 10px auto;
+            }
         }
     </style>
 </head>
@@ -79,8 +123,8 @@
         <p>eDiscovery ensures that companies can securely capture, store, and retrieve conversations from instant messengers. This is critical for businesses looking to stay compliant with regulatory requirements such as GDPR, HIPAA, and other industry-specific regulations.</p>
         <p>By having an eDiscovery solution, organizations can mitigate risks, avoid legal penalties, and maintain transparency in their communication processes. Don’t let important information get lost—stay compliant and protect your business today.</p>
         <div class="cta">
-            <a href="users.html">Go to Users Page</a>
-            <a href="/link" style="margin-left: 10px;">QR Code: Onboard New Employee</a>
+            <a href="users.html">Dashboard</a>
+            <a href="/link" style="margin-left: 10px;">Onboard New Employee</a>
         </div>
     </div>
     <div class="image-content">
