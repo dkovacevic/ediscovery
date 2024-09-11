@@ -1,0 +1,3 @@
+terraform apply -target=module.aws_eks -auto-approve
+terraform apply -target=module.ingress_helm -auto-approve
+terraform apply -auto-approve

@@ -131,8 +131,8 @@
 
 <!-- Back links -->
 <div id="back-links">
-    <a id="back-to-chats" href="#">← Back to Chats</a> |
-    <a href="users.html">← Back to Users</a>
+    <a id="back-to-chats" href="chats.html">← Back to Chats</a> |
+    <a href="users.html">← Dashboard</a>
 </div>
 
 <!-- Main container for chat messages and pagination -->
@@ -150,15 +150,6 @@
     </div>
 </div>
 
-<script src="scripts/messages.js"></script> <!-- External JavaScript to handle chat data -->
-<script>
-    // JavaScript to handle dynamic back links
-    const urlParams = new URLSearchParams(window.location.search);
-    const lhid = urlParams.get('lhid');
-    const name = urlParams.get('name');
-
-    document.getElementById('back-to-chats').href = `chats.html?lhid=${lhid}&name=${name}`;
-</script>
-
+<script src="scripts/messages.js"></script>
 </body>
 </html>
