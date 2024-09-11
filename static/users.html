@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legal Hold Dashboard</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon.png">
+    <title>eDiscovery | Dashboard</title>
     <style>
         /* General body styling */
         body {
@@ -134,7 +135,6 @@
 <div class="container">
     <div class="back-links">
         <a href="index.html">&larr; Back to Homepage</a>
-        <a href="users.html">&larr; Back to Users</a>
         <a href="/link" class="onboard-btn">Onboard New User</a>
     </div>
 
@@ -159,11 +159,6 @@
 </footer>
 
 <!-- External script for populating data -->
-<script src="scripts/users.js">
-    // Check if user is authenticated
-    if (!localStorage.getItem('isLoggedIn')) {
-        window.location.href = 'login.html';
-    }
-</script>
+<script src="scripts/users.js"></script>
 </body>
 </html>
