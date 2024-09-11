@@ -8,13 +8,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function fetchChatData(lhid) {
     fetch(`/api/${lhid}/chats`)
-        .then(response => response.json())
-        .then(data => {
-            populateChatsTable(data, lhid);
+        .then(response => {
+            // If user is not authenticated, redirect to login
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
         })
-        .catch(error => {
-            console.error('Error fetching chats:', error);
-        });
+        .then(data => {
+            if (data) {
+                populateChatsTable(data, lhid);
+            }
+        })
 }
 
 function populateChatsTable(data, lhid) {

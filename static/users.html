@@ -159,6 +159,11 @@
 </footer>
 
 <!-- External script for populating data -->
-<script src="scripts/users.js"></script>
+<script src="scripts/users.js">
+    // Check if user is authenticated
+    if (!localStorage.getItem('isLoggedIn')) {
+        window.location.href = 'login.html';
+    }
+</script>
 </body>
 </html>

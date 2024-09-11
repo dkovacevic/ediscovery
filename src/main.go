@@ -27,12 +27,15 @@ func main() {
 	router := mux.NewRouter()
 
 	// Define the API routes
-	router.HandleFunc("/api/users", handlers.GetUsers).Methods("GET")
-	router.HandleFunc("/api/{lhid}/chats", handlers.GetChats).Methods("GET")
-	router.HandleFunc("/api/{lhid}/chats/{chatid}/messages", handlers.GetMessages).Methods("GET")
+	router.HandleFunc("/api/signup", handlers.SignUpHandler).Methods("POST")
+	router.HandleFunc("/api/login", handlers.LoginHandler).Methods("POST")
+
+	router.Handle("/api/users", handlers.AuthMiddleware(http.HandlerFunc(handlers.GetUsers))).Methods("GET")
+	router.Handle("/api/{lhid}/chats", handlers.AuthMiddleware(http.HandlerFunc(handlers.GetChats))).Methods("GET")
+	router.Handle("/api/{lhid}/chats/{chatid}/messages", handlers.AuthMiddleware(http.HandlerFunc(handlers.GetMessages))).Methods("GET")
 
 	// Handle the "/link" route separately
-	router.HandleFunc("/link", handlers.GenerateQRCode).Methods("GET")
+	router.Handle("/link", handlers.AuthMiddleware(http.HandlerFunc(handlers.GenerateQRCode))).Methods("GET")
 
 	// Serve static files from the "./static" directory for the root path "/"
 	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static/"))))
