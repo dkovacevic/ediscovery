@@ -13,16 +13,30 @@ const { lhid, chatID, name } = getQueryParams();
 let currentPage = 1;  // Start with page 1
 const limit = 10;  // Number of messages per page
 
+// Fetch initial messages on page load
+fetchMessages(currentPage);
+
 // Function to fetch chat messages
 async function fetchMessages(page = 1) {
-    const response = await fetch(`/api/${lhid}/chats/${encodeURIComponent(chatID)}/messages?page=${page}&limit=${limit}`);
-    const data = await response.json();
+    try {
+        const response = await fetch(`/api/${lhid}/chats/${encodeURIComponent(chatID)}/messages?page=${page}&limit=${limit}`);
 
-    if (data.messages && data.messages.length > 0) {
-        renderMessages(data.messages);
-        updatePagination(data.total_pages, page);
-    } else {
-        document.getElementById('chat-messages').innerHTML = '<p>No messages available</p>';
+        // If user is not authenticated, redirect to login
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
+        }
+
+        const data = await response.json();
+
+        if (data.messages && data.messages.length > 0) {
+            renderMessages(data.messages);
+            updatePagination(data.total_pages, page);
+        } else {
+            document.getElementById('chat-messages').innerHTML = '<p>No messages available</p>';
+        }
+    } catch (error) {
+        console.error('Error fetching messages:', error);
     }
 }
 
@@ -71,5 +85,4 @@ document.getElementById('next-page').addEventListener('click', () => {
     fetchMessages(currentPage);
 });
 
-// Fetch initial messages on page load
-fetchMessages(currentPage);
+

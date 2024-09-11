@@ -1,16 +1,26 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     fetchJidData();
 });
 
 function fetchJidData() {
-    fetch('/api/users')
-        .then(response => response.json())
+    fetch('/api/users', {
+        method: 'GET',
+        credentials: 'include'  // Include cookies in the request (important for JWT in cookies)
+    })
+        .then(response => {
+            // If user is not authenticated, redirect to login
+            if (response.redirected) {
+                window.location.href = response.url;
+                return;
+            }
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             populateTable(data);
         })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
 }
 
 function populateTable(data) {

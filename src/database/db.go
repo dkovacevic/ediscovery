@@ -1,7 +1,10 @@
 package database
 
 import (
+	"crypto/sha256"
 	"database/sql"
+	"encoding/hex"
+	"errors"
 	"fmt"
 	"lh-whatsapp/src/models"
 )
@@ -23,8 +26,38 @@ func NewDB(dataSourceName string) error {
 	if err != nil {
 		return fmt.Errorf("failed to open the db: %w", err)
 	}
+	database = &Database{Conn: conn}
 
-	// Create the Kibana table if it doesn't exist
+	err = createLegalholdTable()
+	if err != nil {
+		return fmt.Errorf("failed to createLegalholdTable: %w", err)
+	}
+
+	err = CreateUsersTable()
+	if err != nil {
+		return fmt.Errorf("failed to CreateUsersTable: %w", err)
+	}
+
+	return nil
+}
+
+// Function to create the users table
+func CreateUsersTable() error {
+	query := `
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL
+    );`
+
+	_, err := database.Conn.Exec(query)
+	if err != nil {
+		return fmt.Errorf("failed to create users table: %w", err)
+	}
+	return nil
+}
+
+func createLegalholdTable() error {
 	createTableQuery := `
 	CREATE TABLE IF NOT EXISTS legalhold (
 		lhid TEXT,
@@ -39,13 +72,8 @@ func NewDB(dataSourceName string) error {
 		participants TEXT
 	);`
 
-	_, err = conn.Exec(createTableQuery)
-	if err != nil {
-		return fmt.Errorf("failed to create table: %w", err)
-	}
-
-	database = &Database{Conn: conn}
-	return nil
+	_, err := database.Conn.Exec(createTableQuery)
+	return err
 }
 
 // InsertKibana inserts a Kibana object into the database
@@ -60,30 +88,6 @@ func InsertKibana(k models.Kibana) error {
 	}
 
 	return nil
-}
-
-// FetchChat Fetch chat messages based on lhid and chatid
-func FetchChat(lhid, chatid string) ([]models.ChatMessage, error) {
-	query := `SELECT sender, text, sent FROM legalhold WHERE lhid = ? AND chatId = ? ORDER BY sent`
-	rows, err := database.Conn.Query(query, lhid, chatid)
-	if err != nil {
-		return nil, err
-	}
-
-	var messages []models.ChatMessage
-	for rows.Next() {
-		var message models.ChatMessage
-		if err := rows.Scan(&message.SenderName, &message.Text, &message.SentDate); err != nil {
-			return nil, err
-		}
-		messages = append(messages, message)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	return messages, nil
 }
 
 // FetchPaginatedChat returns a paginated list of messages for the given lhid and chatId
@@ -156,4 +160,46 @@ func FetchTotalMessagesCount(lhid string, chatId string) (int, error) {
 		return 0, err
 	}
 	return count, nil
+}
+
+// Function to hash the password using SHA-256
+func HashPassword(password string) string {
+	hash := sha256.New()
+	hash.Write([]byte(password))
+	return hex.EncodeToString(hash.Sum(nil))
+}
+
+// Function to insert a new user (with hashed password)
+func InsertUser(username, password string) error {
+	if username != "dejan" {
+		return errors.New("cannot create new user with this name")
+	}
+
+	hashedPassword := HashPassword(password)
+	query := `INSERT INTO users (username, password) VALUES (?, ?);`
+	_, err := database.Conn.Exec(query, username, hashedPassword)
+	if err != nil {
+		return fmt.Errorf("failed to insert user: %w", err)
+	}
+	return nil
+}
+
+// Function to authenticate user by username and password
+func AuthenticateUser(username, password string) (bool, error) {
+	var storedHash string
+	query := `SELECT password FROM users WHERE username = ?;`
+	err := database.Conn.QueryRow(query, username).Scan(&storedHash)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, errors.New("invalid username or password")
+		}
+		return false, err
+	}
+
+	// Hash the input password and compare it with the stored hash
+	inputHash := HashPassword(password)
+	if inputHash != storedHash {
+		return false, errors.New("invalid username or password")
+	}
+	return true, nil
 }
