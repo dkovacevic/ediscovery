@@ -1,25 +1,24 @@
-// qrcode.go
 package handlers
 
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/mdp/qrterminal"
 	"go.mau.fi/whatsmeow"
 	waLog "go.mau.fi/whatsmeow/util/log"
-	"html/template"
-	"io/ioutil"
 	"lh-whatsapp/src/meow"
 	"net/http"
 )
 
-// QRData Data structure to pass data to the HTML template
-type QRData struct {
-	QRCode string
+// QRCodeResponse is the structure for the JSON response
+type QRCodeResponse struct {
+	QRCode string `json:"qr_code"`
 }
 
-func GenerateQRCode(w http.ResponseWriter, _ *http.Request) {
+// GenerateQRCodeJSON generates the QR code and returns it as JSON
+func GenerateQRCodeJSON(w http.ResponseWriter, _ *http.Request) {
 	deviceStore := meow.NewDevice()
 
 	clientLog := waLog.Stdout("Client", "INFO", true)
@@ -57,54 +56,24 @@ func GenerateQRCode(w http.ResponseWriter, _ *http.Request) {
 		}
 	}()
 
-	//flusher, _ := w.(http.Flusher)
-
 	// Handle the QR code event in the main thread
 	for evt := range qrChan {
 		if evt.Event == "code" {
 			fmt.Println("QRChannel event: ", evt.Event)
 
-			// Generate and return the QR code immediately
+			// Generate the ASCII QR code
 			var buf bytes.Buffer
 			qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, &buf)
 
-			// Generate HTML
-			renderQR(w, buf)
+			// Prepare the JSON response
+			response := QRCodeResponse{
+				QRCode: buf.String(),
+			}
 
-			//flusher.Flush() // Flush the QR code to the response
-
+			// Send the response as JSON
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(response)
 			return
 		}
 	}
-}
-
-func renderQR(w http.ResponseWriter, buf bytes.Buffer) {
-	data := QRData{
-		QRCode: buf.String(),
-	}
-
-	// Read the HTML file
-	htmlFile, err := ioutil.ReadFile("resources/qr_code.html")
-	if err != nil {
-		http.Error(w, "Unable to read HTML file", http.StatusInternalServerError)
-		return
-	}
-
-	// Convert to string
-	htmlContent := string(htmlFile)
-
-	// Load the HTML template
-	tmpl, err := template.New("qr").Parse(htmlContent)
-	if err != nil {
-		http.Error(w, "Unable to parse HTML template", http.StatusInternalServerError)
-		return
-	}
-
-	// Render the HTML with the QR code
-	err = tmpl.Execute(w, data)
-	if err != nil {
-		http.Error(w, "Unable to render template", http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "text/plain")
 }

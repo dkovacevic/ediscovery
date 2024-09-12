@@ -38,9 +38,11 @@ func EventHandler(client *whatsmeow.Client, evt interface{}) {
 			}
 		}
 
-		trace(kibana)
+		if kibana.Text != "" {
+			trace(kibana)
 
-		storeDB(kibana)
+			storeDB(kibana)
+		}
 	}
 }
 

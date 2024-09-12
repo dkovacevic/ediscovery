@@ -100,6 +100,7 @@
 <div class="login-container">
     <h2>Login</h2>
     <form action="/api/login" method="post">
+        <input type="hidden" id="redirectUrl" name="redirectUrl" value="">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" placeholder="Enter your username" required>
 
@@ -113,6 +114,11 @@
         <p>Don’t have an account? <a href="/signup.html">Sign up</a></p>
     </div>
 </div>
-
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the referrer URL and set it in the hidden field
+        document.getElementById('redirectUrl').value = document.referrer || '/';
+    });
+</script>
 </body>
 </html>

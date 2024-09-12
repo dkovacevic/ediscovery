@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchChatData(lhid) {
-    fetch(`/api/${lhid}/chats`)
+    fetch(`/api/${lhid}/chats`, {
+        method: 'GET',
+        credentials: 'include'  // Include cookies in the request (important for JWT in cookies)
+    })
         .then(response => {
             // If user is not authenticated, redirect to login
             if (response.redirected) {
