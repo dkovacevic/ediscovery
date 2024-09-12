@@ -30,7 +30,6 @@ WORKDIR /opt/whatsapp
 COPY --from=builder /app/lh-whatsapp .
 
 COPY static/ static/
-COPY resources/ resources/
 
 RUN chmod +x lh-whatsapp
 

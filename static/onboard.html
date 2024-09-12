@@ -92,7 +92,7 @@
     <p>To comply with legal regulations and company policies, your WhatsApp conversations will now be monitored as part of a legal hold process. This ensures all communications are preserved and made available for legal review if required.</p>
 
     <div class="qr-code">
-        <pre>{{.QRCode}}</pre> <!-- Placeholder for dynamically generated ASCII QR code -->
+        <pre id="qrCode">Loading QR code...</pre> <!-- Placeholder for dynamically generated ASCII QR code -->
     </div>
 
     <p class="instructions">Please scan the above QR code in your WhatsApp client by navigating to <strong>Settings &gt; Linked Devices</strong> and linking your device.</p>
@@ -102,5 +102,6 @@
     <a href="index.html">Back to Dashboard</a>
 </div>
 
+<script src="scripts/qr.js"></script> <!-- Include the JavaScript file -->
 </body>
 </html>

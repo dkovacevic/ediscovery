@@ -33,9 +33,7 @@ func main() {
 	router.Handle("/api/users", handlers.AuthMiddleware(http.HandlerFunc(handlers.GetUsers))).Methods("GET")
 	router.Handle("/api/{lhid}/chats", handlers.AuthMiddleware(http.HandlerFunc(handlers.GetChats))).Methods("GET")
 	router.Handle("/api/{lhid}/chats/{chatid}/messages", handlers.AuthMiddleware(http.HandlerFunc(handlers.GetMessages))).Methods("GET")
-
-	// Handle the "/link" route separately
-	router.HandleFunc("/link", handlers.GenerateQRCode).Methods("GET")
+	router.Handle("/api/code", handlers.AuthMiddleware(http.HandlerFunc(handlers.GenerateQRCodeJSON))).Methods("GET")
 
 	// Serve static files from the "./static" directory for the root path "/"
 	router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static/"))))

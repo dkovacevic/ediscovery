@@ -4,6 +4,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"lh-whatsapp/src/database"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -14,6 +15,8 @@ type Claims struct {
 }
 
 var jwtKey = []byte("my_secret_key")
+
+const cookieName = "auth5"
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -39,7 +42,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	if authenticated {
 		// Generate JWT token
-		expirationTime := time.Now().Add(60 * time.Minute)
+		expirationTime := time.Now().Add(15 * time.Minute)
 		claims := &Claims{
 			Username: username,
 			RegisteredClaims: jwt.RegisteredClaims{
@@ -56,13 +59,20 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 		// Set JWT token in a cookie
 		http.SetCookie(w, &http.Cookie{
-			Name:     "token",
+			Name:     cookieName,
 			Value:    tokenString,
 			Expires:  expirationTime,
 			HttpOnly: true,
 		})
-		// On success, redirect to the dashboard or whatever page is needed
-		http.Redirect(w, r, "/users.html", http.StatusSeeOther)
+
+		// Get the redirect URL from the query parameters
+		redirectURL := r.FormValue("redirectUrl")
+		if redirectURL == "" {
+			redirectURL = "/index.html" // Default redirect if none is provided
+		}
+
+		// On success, redirect to the original destination or default page
+		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 	} else {
 		http.Error(w, "Invalid login credentials", http.StatusUnauthorized)
 	}
@@ -71,12 +81,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 // AuthMiddleware validates JWT in cookies and redirects to login if token is missing or invalid
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		referrer := r.Referer()
+		if referrer == "" {
+			referrer = "/" // Default page if no referrer is available
+		}
+
 		// Check if the token exists in the cookie
-		cookie, err := r.Cookie("token")
+		cookie, err := r.Cookie(cookieName)
 		if err != nil {
 			if err == http.ErrNoCookie {
-				// Redirect to login.html if no token found
-				http.Redirect(w, r, "/login.html", http.StatusSeeOther)
+				http.Redirect(w, r, "/login.html?redirect="+url.QueryEscape(referrer), http.StatusSeeOther)
 				return
 			}
 			http.Error(w, "Bad request", http.StatusBadRequest)
@@ -93,8 +107,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {
-				// Redirect to login.html if token signature is invalid
-				http.Redirect(w, r, "/login.html", http.StatusSeeOther)
+				http.Redirect(w, r, "/login.html?redirect="+url.QueryEscape(referrer), http.StatusSeeOther)
 				return
 			}
 			http.Error(w, "Bad request", http.StatusBadRequest)
@@ -102,8 +115,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		if !token.Valid {
-			// Redirect to login.html if token is invalid
-			http.Redirect(w, r, "/login.html", http.StatusSeeOther)
+			http.Redirect(w, r, "/login.html?redirect="+url.QueryEscape(referrer), http.StatusSeeOther)
 			return
 		}
 
