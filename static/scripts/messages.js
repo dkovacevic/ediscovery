@@ -4,12 +4,12 @@ function getQueryParams() {
     return {
         lhid: params.get('lhid'),
         chatID: params.get('chatid'),
-        name:  params.get('name'),
+        name: params.get('name'),
     };
 }
 
 // Extract `lhid` and `chatID` from URL
-const { lhid, chatID, name } = getQueryParams();
+const {lhid, chatID, name} = getQueryParams();
 let currentPage = 1;  // Start with page 1
 const limit = 10;  // Number of messages per page
 
@@ -19,7 +19,10 @@ fetchMessages(currentPage);
 // Function to fetch chat messages
 async function fetchMessages(page = 1) {
     try {
-        const response = await fetch(`/api/${lhid}/chats/${encodeURIComponent(chatID)}/messages?page=${page}&limit=${limit}`);
+        const response = await fetch(`/api/${lhid}/chats/${encodeURIComponent(chatID)}/messages?page=${page}&limit=${limit}`, {
+            method: 'GET',
+            credentials: 'include'  // Include cookies in the request (important for JWT in cookies)
+        });
 
         // If user is not authenticated, redirect to login
         if (response.redirected) {
