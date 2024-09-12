@@ -117,8 +117,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Get the referrer URL and set it in the hidden field
-        const referrer = document.referrer || '/';
-        document.getElementById('redirectUrl').value = referrer;
+        document.getElementById('redirectUrl').value = document.referrer || '/';
     });
 </script>
 </body>

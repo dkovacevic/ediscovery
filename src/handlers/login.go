@@ -16,7 +16,7 @@ type Claims struct {
 
 var jwtKey = []byte("my_secret_key")
 
-const cookieName = "auth5"
+const cookieName = "auth"
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -26,6 +26,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	username := r.FormValue("username")
 	password := r.FormValue("password")
+	redirectURL := r.FormValue("redirectUrl")
+
+	if redirectURL == "" {
+		redirectURL = "/index.html" // Default redirect if none is provided
+	}
 
 	// Validate input
 	if username == "" || password == "" {
@@ -64,12 +69,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			Expires:  expirationTime,
 			HttpOnly: true,
 		})
-
-		// Get the redirect URL from the query parameters
-		redirectURL := r.FormValue("redirectUrl")
-		if redirectURL == "" {
-			redirectURL = "/index.html" // Default redirect if none is provided
-		}
 
 		// On success, redirect to the original destination or default page
 		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
