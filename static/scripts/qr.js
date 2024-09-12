@@ -11,8 +11,7 @@ function fetchQRCode() {
         .then(response => {
             // If user is not authenticated, redirect to login
             if (response.redirected) {
-                const currentPage = window.location.href;
-                window.location.href = `/login.html?redirect=${encodeURIComponent(currentPage)}`;
+                window.location.href = response.url;
                 return;
             }
             if (!response.ok) {
