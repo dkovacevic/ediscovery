@@ -34,23 +34,28 @@ function populateTable(data) {
     data.forEach(item => {
         const row = document.createElement('tr');
 
-        // Create a table cell for JID and make it a hyperlink
-        const jidCell = document.createElement('td');
-        const jidLink = document.createElement('a');
-        jidLink.href = `/chats.html?lhid=${encodeURIComponent(item.jid)}&name=${encodeURIComponent(item.name)}`;
-        jidLink.textContent = item.jid;
-        jidCell.appendChild(jidLink);  // Append the link to the cell
-        row.appendChild(jidCell);
-
         // Create a table cell for Name
         const nameCell = document.createElement('td');
         nameCell.textContent = item.name;
         row.appendChild(nameCell);
 
+        // Create a table cell for PhoneNo
+        const phoneCell = document.createElement('td');
+        phoneCell.textContent = "+" + item.user;
+        row.appendChild(phoneCell);
+
         // Create a table cell for Device
         const deviceCell = document.createElement('td');
         deviceCell.textContent = item.device;
         row.appendChild(deviceCell);
+
+        // Create a table cell for JID and make it a hyperlink
+        const jidCell = document.createElement('td');
+        const jidLink = document.createElement('a');
+        jidLink.href = `/chats.html?lhid=${encodeURIComponent(item.jid)}&name=${encodeURIComponent(item.name)}`;
+        jidLink.textContent = item.jid;
+        jidCell.appendChild(jidLink);
+        row.appendChild(jidCell);
 
         // Append the row to the table body
         tableBody.appendChild(row);

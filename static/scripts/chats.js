@@ -49,20 +49,15 @@ function populateChatsTable(data, lhid) {
         chatIdCell.appendChild(chatIdLink);
         row.appendChild(chatIdCell);
 
-        // Add group name cell
-        const groupNameCell = document.createElement('td');
-        groupNameCell.textContent = item.groupName;
-        row.appendChild(groupNameCell);
+        // Add Name cell
+        const nameCell = document.createElement('td');
+        nameCell.textContent = item.name !== "" ? item.name : item.groupName;
+        row.appendChild(nameCell);
 
         // Add participants cell
-        const participantsCell = document.createElement('td');
-        // Check if participants is an array
-        if (Array.isArray(item.participants)) {
-            participantsCell.textContent = item.participants.join(', ');
-        } else {
-            participantsCell.textContent = 'N/A'; // or handle the case appropriately
-        }
-        row.appendChild(participantsCell);
+        const phoneCell = document.createElement('td');
+        phoneCell.textContent = item.phoneNo;
+        row.appendChild(phoneCell);
 
         // Append the row to the table body
         tableBody.appendChild(row);

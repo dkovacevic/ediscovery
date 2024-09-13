@@ -46,7 +46,7 @@ func GenerateQRCodeJSON(w http.ResponseWriter, _ *http.Request) {
 		for evt := range qrChan {
 			if evt.Event == "success" {
 				// Handle successful connection
-				fmt.Println("Login event:", evt.Event)
+				fmt.Printf("New LH Device. JID: %v\n", client.Store.ID)
 			}
 		}
 
@@ -59,8 +59,6 @@ func GenerateQRCodeJSON(w http.ResponseWriter, _ *http.Request) {
 	// Handle the QR code event in the main thread
 	for evt := range qrChan {
 		if evt.Event == "code" {
-			fmt.Println("QRChannel event: ", evt.Event)
-
 			// Generate the ASCII QR code
 			var buf bytes.Buffer
 			qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, &buf)

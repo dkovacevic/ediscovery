@@ -19,10 +19,12 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	_, err = meow.InitWhatsAppClients()
-	if err != nil {
-		log.Fatalf("Failed to Init WhatsApp clients: %v", err)
-	}
+	go func() {
+		_, err := meow.InitWhatsAppClients()
+		if err != nil {
+			log.Fatalf("Failed to Init WhatsApp clients: %v", err)
+		}
+	}()
 
 	router := mux.NewRouter()
 

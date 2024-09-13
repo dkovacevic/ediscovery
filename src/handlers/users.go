@@ -21,7 +21,8 @@ func GetUsers(writer http.ResponseWriter, _ *http.Request) {
 	// Iterate over the devices and populate the device details slice
 	for _, deviceStore := range devices {
 		deviceDetails = append(deviceDetails, models.User{
-			JID:    deviceStore.ID.User,
+			JID:    deviceStore.ID.String(),
+			User:   deviceStore.ID.User,
 			Name:   deviceStore.PushName,
 			Device: deviceStore.Platform,
 		})

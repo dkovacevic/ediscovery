@@ -6,6 +6,7 @@ import (
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store"
 	"go.mau.fi/whatsmeow/store/sqlstore"
+	"go.mau.fi/whatsmeow/types"
 	waLog "go.mau.fi/whatsmeow/util/log"
 )
 
@@ -25,8 +26,7 @@ func InitWhatsAppClients() ([]*whatsmeow.Client, error) {
 	}
 
 	for _, deviceStore := range devices {
-		clientLog := waLog.Stdout("Client", "INFO", true)
-		client := whatsmeow.NewClient(deviceStore, clientLog)
+		client := NewClient(deviceStore)
 
 		fmt.Println("Connecting WhatsApp client:", client.Store.ID)
 
@@ -39,8 +39,19 @@ func InitWhatsAppClients() ([]*whatsmeow.Client, error) {
 		client.AddEventHandler(func(evt interface{}) {
 			EventHandler(client, evt)
 		})
+
 	}
 	return clients, nil
+}
+
+func NewClient(deviceStore *store.Device) *whatsmeow.Client {
+	clientLog := waLog.Stdout("Client", "INFO", true)
+	client := whatsmeow.NewClient(deviceStore, clientLog)
+	return client
+}
+
+func GetUserInfo(client *whatsmeow.Client, jids []types.JID) (map[types.JID]types.UserInfo, error) {
+	return client.GetUserInfo(jids)
 }
 
 func GetAllDevices() ([]*store.Device, error) {
@@ -49,4 +60,8 @@ func GetAllDevices() ([]*store.Device, error) {
 
 func NewDevice() *store.Device {
 	return container.NewDevice()
+}
+
+func GetDevice(jid types.JID) (*store.Device, error) {
+	return container.GetDevice(jid)
 }
