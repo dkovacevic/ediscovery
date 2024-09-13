@@ -30,6 +30,7 @@ func GetChats(w http.ResponseWriter, r *http.Request) {
 	for i := range chats {
 		chatJID, err := types.ParseJID(chats[i].ChatID)
 		if err == nil {
+			chats[i].PhoneNo = "+" + chatJID.User
 			contact, err := device.Contacts.GetContact(chatJID)
 			if err == nil {
 				if contact.FullName != "" {

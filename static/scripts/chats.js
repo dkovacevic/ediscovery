@@ -55,9 +55,9 @@ function populateChatsTable(data, lhid) {
         row.appendChild(nameCell);
 
         // Add participants cell
-        const participantsCell = document.createElement('td');
-        participantsCell.textContent = 'N/A';
-        row.appendChild(participantsCell);
+        const phoneCell = document.createElement('td');
+        phoneCell.textContent = item.phoneNo;
+        row.appendChild(phoneCell);
 
         // Append the row to the table body
         tableBody.appendChild(row);

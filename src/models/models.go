@@ -12,6 +12,7 @@ type Chat struct {
 	Name         string `json:"name"`
 	GroupName    string `json:"groupName"`
 	Participants string `json:"participants"`
+	PhoneNo      string `json:"phoneNo"`
 }
 
 type User struct {

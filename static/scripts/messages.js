@@ -11,7 +11,7 @@ function getQueryParams() {
 // Extract `lhid` and `chatID` from URL
 const {lhid, chatID, name} = getQueryParams();
 let currentPage = 1;  // Start with page 1
-const limit = 10;  // Number of messages per page
+const limit = 20;  // Number of messages per page
 
 // Fetch initial messages on page load
 fetchMessages(currentPage);
