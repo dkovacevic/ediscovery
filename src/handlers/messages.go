@@ -15,7 +15,6 @@ import (
 // GetMessages Handle /chat endpoint
 func GetMessages(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	lhid := vars["lhid"]
 	chatId := vars["chatid"]
 
 	lhJID, err := types.ParseJID(vars["lhid"])
@@ -36,7 +35,7 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	totalMessages, err := database.FetchTotalMessagesCount(lhid, chatId)
+	totalMessages, err := database.FetchTotalMessagesCount(lhJID.User, chatId)
 	if err != nil {
 		http.Error(w, "Unable to fetch total message count", http.StatusInternalServerError)
 		fmt.Printf("database.FetchTotalMessagesCount: %v", err)
