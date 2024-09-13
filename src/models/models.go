@@ -15,6 +15,14 @@ type Chat struct {
 	PhoneNo      string `json:"phoneNo"`
 }
 
+type ChatListResult struct {
+	JID  string `json:"jid"`
+	User string `json:"user"`
+	Name string `json:"name"`
+
+	Chats []Chat `json:"chats"`
+}
+
 type User struct {
 	JID    string `json:"jid"`
 	User   string `json:"user"`
@@ -40,6 +48,7 @@ type Kibana struct {
 
 	Group        string `json:"group"`
 	Participants string `json:"participants"`
+	IsGroup      bool   `json:"is_group"`
 }
 
 type PaginatedResponse struct {

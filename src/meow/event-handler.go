@@ -4,38 +4,27 @@ package meow
 import (
 	"encoding/json"
 	"fmt"
-	"go.mau.fi/whatsmeow"
-	"go.mau.fi/whatsmeow/types"
+	"go.mau.fi/whatsmeow/store"
+	"go.mau.fi/whatsmeow/types/events"
 	"lh-whatsapp/src/database"
 	"lh-whatsapp/src/models"
 	"log"
-	"strings"
-
-	"go.mau.fi/whatsmeow/types/events"
 )
 
-func EventHandler(client *whatsmeow.Client, evt interface{}) {
+func EventHandler(device *store.Device, evt interface{}) {
 	switch v := evt.(type) {
 	case *events.Message:
 		// Initializing the Kibana object
 		kibana := models.Kibana{
-			LHID:   client.Store.ID.User,
-			ID:     v.Info.ID,
-			ChatID: v.Info.Chat.String(),
-			Sent:   v.Info.Timestamp.String(),
-			Sender: v.Info.PushName,
-			From:   v.Info.Sender.String(),
-			Type:   v.Info.Type,
-			Text:   v.Message.GetConversation(),
-		}
-
-		if v.Info.IsGroup {
-			// Fetch group info to get the group title
-			groupInfo, err := client.GetGroupInfo(v.Info.Chat)
-			if err == nil {
-				kibana.Group = groupInfo.Name
-				kibana.Participants = extractJIDs(groupInfo.Participants)
-			}
+			LHID:    device.ID.User,
+			ID:      v.Info.ID,
+			ChatID:  v.Info.Chat.String(),
+			Sent:    v.Info.Timestamp.String(),
+			Sender:  v.Info.PushName,
+			From:    v.Info.Sender.String(),
+			Type:    v.Info.Type,
+			Text:    v.Message.GetConversation(),
+			IsGroup: v.Info.IsGroup,
 		}
 
 		if kibana.Text != "" {
@@ -67,17 +56,4 @@ func trace(kibana models.Kibana) {
 
 	// Print the JSON string
 	fmt.Println(string(jsonData))
-}
-
-// Custom function to extract JIDs
-func extractJIDs(participants []types.GroupParticipant) string {
-	if participants == nil {
-		return ""
-	}
-
-	jids := make([]string, len(participants))
-	for i, participant := range participants {
-		jids[i] = participant.JID.String()
-	}
-	return strings.Join(jids, ",")
 }

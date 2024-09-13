@@ -37,7 +37,7 @@ func InitWhatsAppClients() ([]*whatsmeow.Client, error) {
 		}
 
 		client.AddEventHandler(func(evt interface{}) {
-			EventHandler(client, evt)
+			EventHandler(deviceStore, evt)
 		})
 
 	}

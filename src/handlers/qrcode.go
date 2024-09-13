@@ -38,7 +38,7 @@ func GenerateQRCodeJSON(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	client.AddEventHandler(func(evt interface{}) {
-		meow.EventHandler(client, evt)
+		meow.EventHandler(client.Store, evt)
 	})
 
 	// Start a goroutine to handle events after sending the QR code

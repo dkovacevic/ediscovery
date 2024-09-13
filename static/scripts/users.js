@@ -36,7 +36,7 @@ function populateTable(data) {
 
         // Add a click event to the entire row
         row.addEventListener('click', function() {
-            window.location.href = `/chats.html?lhid=${encodeURIComponent(item.jid)}&name=${encodeURIComponent(item.name)}`;
+            window.location.href = `/chats.html?lhid=${encodeURIComponent(item.jid)}`;
         });
 
         // Ensure that the cursor indicates the row is clickable
