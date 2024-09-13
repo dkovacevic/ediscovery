@@ -31,7 +31,7 @@ function fetchChatData(lhid) {
 
 function populateChatsTable(data, lhid) {
     const tableBody = document.querySelector('#chatsTable tbody');
-    const name = document.getElementById('name').textContent
+    const name = document.getElementById('name').textContent;
 
     if (!tableBody) {
         console.error('Table body not found');
@@ -41,25 +41,34 @@ function populateChatsTable(data, lhid) {
     data.forEach(item => {
         const row = document.createElement('tr');
 
-        // Create a hyperlink for chatId
-        const chatIdCell = document.createElement('td');
-        const chatIdLink = document.createElement('a');
-        chatIdLink.href = `messages.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}&name=${encodeURIComponent(name)}`;
-        chatIdLink.textContent = item.chatId;
-        chatIdCell.appendChild(chatIdLink);
-        row.appendChild(chatIdCell);
+        // Create the hyperlink for the entire row
+        const rowLink = `messages.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}&name=${encodeURIComponent(name)}`;
 
         // Add Name cell
         const nameCell = document.createElement('td');
         nameCell.textContent = item.name !== "" ? item.name : item.groupName;
         row.appendChild(nameCell);
 
-        // Add participants cell
+        // Add PhoneNo cell
         const phoneCell = document.createElement('td');
         phoneCell.textContent = item.phoneNo;
         row.appendChild(phoneCell);
+
+        // Add Chat ID cell
+        const chatIdCell = document.createElement('td');
+        chatIdCell.textContent = item.chatId;
+        row.appendChild(chatIdCell);
+
+        // Make the entire row clickable
+        row.addEventListener('click', () => {
+            window.location.href = rowLink;
+        });
+
+        // Set the cursor to pointer to indicate it's clickable
+        row.style.cursor = 'pointer';
 
         // Append the row to the table body
         tableBody.appendChild(row);
     });
 }
+
