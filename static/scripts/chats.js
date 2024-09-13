@@ -1,15 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     const params = new URLSearchParams(window.location.search);
     const lhid = params.get('lhid');
-    const name = params.get('name');
-    document.getElementById('name').textContent = decodeURIComponent(name);
     fetchChatData(lhid);
 });
 
 function fetchChatData(lhid) {
     fetch(`/api/${lhid}/chats`, {
         method: 'GET',
-        credentials: 'include'  // Include cookies in the request (important for JWT in cookies)
+        credentials: 'include'
     })
         .then(response => {
             // If user is not authenticated, redirect to login
@@ -31,18 +29,18 @@ function fetchChatData(lhid) {
 
 function populateChatsTable(data, lhid) {
     const tableBody = document.querySelector('#chatsTable tbody');
-    const name = document.getElementById('name').textContent;
+    document.getElementById('name').textContent = data.name;
 
     if (!tableBody) {
         console.error('Table body not found');
         return;
     }
 
-    data.forEach(item => {
+    data.chats.forEach(item => {
         const row = document.createElement('tr');
 
         // Create the hyperlink for the entire row
-        const rowLink = `messages.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}&name=${encodeURIComponent(name)}`;
+        const rowLink = `messages.html?chatid=${encodeURIComponent(item.chatId)}&lhid=${encodeURIComponent(lhid)}`;
 
         // Add Name cell
         const nameCell = document.createElement('td');

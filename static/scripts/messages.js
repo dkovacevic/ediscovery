@@ -4,12 +4,11 @@ function getQueryParams() {
     return {
         lhid: params.get('lhid'),
         chatID: params.get('chatid'),
-        name: params.get('name'),
     };
 }
 
 // Extract `lhid` and `chatID` from URL
-const {lhid, chatID, name} = getQueryParams();
+const {lhid, chatID} = getQueryParams();
 let currentPage = 1;  // Start with page 1
 const limit = 15;  // Number of messages per page
 
@@ -47,7 +46,7 @@ async function fetchMessages(page = 1) {
 function renderMessages(messages) {
     const chatMessagesDiv = document.getElementById('chat-messages');
     chatMessagesDiv.innerHTML = '';  // Clear previous messages
-    document.getElementById('back-to-chats').href = `chats.html?lhid=${lhid}&name=${name}`;
+    document.getElementById('back-to-chats').href = `chats.html?lhid=${lhid}`;
 
     messages.forEach(message => {
         const messageDiv = document.createElement('div');

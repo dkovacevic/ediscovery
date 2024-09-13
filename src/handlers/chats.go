@@ -7,12 +7,14 @@ import (
 	"go.mau.fi/whatsmeow/types"
 	"lh-whatsapp/src/database"
 	"lh-whatsapp/src/meow"
+	"lh-whatsapp/src/models"
 	"net/http"
 )
 
 func GetChats(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	lhJID, err := types.ParseJID(vars["lhid"])
+	lhid := vars["lhid"]
+	lhJID, err := types.ParseJID(lhid)
 
 	if err != nil {
 		http.Error(w, "Missing lhid", http.StatusBadRequest)
@@ -42,7 +44,14 @@ func GetChats(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	result := models.ChatListResult{
+		JID:   lhid,
+		User:  lhJID.User,
+		Name:  device.PushName,
+		Chats: chats,
+	}
+
 	// Return the data as JSON
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(chats)
+	json.NewEncoder(w).Encode(result)
 }

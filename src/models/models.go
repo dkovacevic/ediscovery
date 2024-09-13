@@ -15,6 +15,14 @@ type Chat struct {
 	PhoneNo      string `json:"phoneNo"`
 }
 
+type ChatListResult struct {
+	JID  string `json:"jid"`
+	User string `json:"user"`
+	Name string `json:"name"`
+
+	Chats []Chat `json:"chats"`
+}
+
 type User struct {
 	JID    string `json:"jid"`
 	User   string `json:"user"`
