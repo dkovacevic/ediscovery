@@ -11,7 +11,7 @@ function getQueryParams() {
 // Extract `lhid` and `chatID` from URL
 const {lhid, chatID, name} = getQueryParams();
 let currentPage = 1;  // Start with page 1
-const limit = 20;  // Number of messages per page
+const limit = 15;  // Number of messages per page
 
 // Fetch initial messages on page load
 fetchMessages(currentPage);
@@ -19,7 +19,7 @@ fetchMessages(currentPage);
 // Function to fetch chat messages
 async function fetchMessages(page = 1) {
     try {
-        const response = await fetch(`/api/${lhid}/chats/${encodeURIComponent(chatID)}/messages?page=${page}&limit=${limit}`, {
+        const response = await fetch(`/api/${encodeURIComponent(lhid)}/chats/${encodeURIComponent(chatID)}/messages?page=${page}&limit=${limit}`, {
             method: 'GET',
             credentials: 'include'  // Include cookies in the request (important for JWT in cookies)
         });

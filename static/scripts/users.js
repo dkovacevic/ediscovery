@@ -41,7 +41,7 @@ function populateTable(data) {
 
         // Create a table cell for PhoneNo
         const phoneCell = document.createElement('td');
-        phoneCell.textContent = item.user;
+        phoneCell.textContent = "+" + item.user;
         row.appendChild(phoneCell);
 
         // Create a table cell for Device
