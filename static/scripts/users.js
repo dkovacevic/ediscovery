@@ -34,27 +34,29 @@ function populateTable(data) {
     data.forEach(item => {
         const row = document.createElement('tr');
 
-        // Create a table cell for Name
+        // Add a click event to the entire row
+        row.addEventListener('click', function() {
+            window.location.href = `/chats.html?lhid=${encodeURIComponent(item.jid)}&name=${encodeURIComponent(item.name)}`;
+        });
+
+        // Ensure that the cursor indicates the row is clickable
+        row.style.cursor = 'pointer';
+
+        // Create table cells
         const nameCell = document.createElement('td');
-        nameCell.textContent = item.name;
+        nameCell.textContent = item.name !== "" ? item.name : item.groupName;
         row.appendChild(nameCell);
 
-        // Create a table cell for PhoneNo
         const phoneCell = document.createElement('td');
         phoneCell.textContent = "+" + item.user;
         row.appendChild(phoneCell);
 
-        // Create a table cell for Device
         const deviceCell = document.createElement('td');
         deviceCell.textContent = item.device;
         row.appendChild(deviceCell);
 
-        // Create a table cell for JID and make it a hyperlink
         const jidCell = document.createElement('td');
-        const jidLink = document.createElement('a');
-        jidLink.href = `/chats.html?lhid=${encodeURIComponent(item.jid)}&name=${encodeURIComponent(item.name)}`;
-        jidLink.textContent = item.jid;
-        jidCell.appendChild(jidLink);
+        jidCell.textContent = item.jid;
         row.appendChild(jidCell);
 
         // Append the row to the table body

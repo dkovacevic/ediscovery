@@ -92,14 +92,20 @@
             background-color: #f2f2f2;
         }
 
-        /* Link styles inside table */
-        a {
+        /* Hover effect for table rows */
+        tbody tr:hover {
+            background-color: #f0f0f0;
+            text-decoration: underline;
             color: #25d366;
-            text-decoration: none;
         }
 
-        a:hover {
-            text-decoration: underline;
+        tbody tr {
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        tbody td {
+            color: inherit; /* Inherit text color for consistency */
         }
 
         /* Footer styles */
