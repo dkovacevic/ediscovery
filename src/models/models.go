@@ -40,6 +40,7 @@ type Kibana struct {
 
 	Group        string `json:"group"`
 	Participants string `json:"participants"`
+	IsGroup      bool   `json:"is_group"`
 }
 
 type PaginatedResponse struct {
