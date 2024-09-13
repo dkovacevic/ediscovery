@@ -9,12 +9,14 @@ type ChatMessage struct {
 // Chat represents a single chat overview
 type Chat struct {
 	ChatID       string `json:"chatId"`
+	Name         string `json:"name"`
 	GroupName    string `json:"groupName"`
 	Participants string `json:"participants"`
 }
 
 type User struct {
 	JID    string `json:"jid"`
+	User   string `json:"user"`
 	Name   string `json:"name"`
 	Device string `json:"device"`
 }

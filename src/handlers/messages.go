@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
+	"go.mau.fi/whatsmeow/types"
 	"lh-whatsapp/src/database"
 	"lh-whatsapp/src/models"
 	"net/http"
@@ -17,11 +18,18 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 	lhid := vars["lhid"]
 	chatId := vars["chatid"]
 
+	lhJID, err := types.ParseJID(vars["lhid"])
+
+	if err != nil {
+		http.Error(w, "Missing lhid", http.StatusBadRequest)
+		return
+	}
+
 	// Parse pagination parameters
 	page, limit := parsePaginationParams(r)
 
 	// Fetch paginated messages from the database
-	messages, err := database.FetchPaginatedChat(lhid, chatId, page, limit)
+	messages, err := database.FetchPaginatedChat(lhJID.User, chatId, page, limit)
 	if err != nil {
 		http.Error(w, "Unable to fetch chat", http.StatusInternalServerError)
 		fmt.Printf("database.FetchPaginatedChat: %v", err)
