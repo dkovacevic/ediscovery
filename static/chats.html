@@ -56,6 +56,22 @@
             background-color: #f2f2f2;
         }
 
+        /* Hover effect for table rows */
+        tbody tr:hover {
+            background-color: #f0f0f0;
+            text-decoration: underline;
+            color: #25d366;
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        tbody td {
+            color: inherit; /* Inherit text color for consistency */
+        }
+
         /* Link styling */
         a {
             color: #25d366;
@@ -137,9 +153,9 @@
     <table id="chatsTable">
         <thead>
         <tr>
-            <th>Chat ID</th>
             <th>Name</th>
             <th>PhoneNo</th>
+            <th>Chat ID</th>
         </tr>
         </thead>
         <tbody>
