@@ -11,6 +11,11 @@ import (
 	"log"
 )
 
+// Log represents the top-level log structure.
+type Log struct {
+	Legalhold models.Kibana
+}
+
 func EventHandler(device *store.Device, evt interface{}) {
 	switch v := evt.(type) {
 	case *events.Message:
@@ -28,7 +33,7 @@ func EventHandler(device *store.Device, evt interface{}) {
 		}
 
 		if kibana.Text != "" {
-			trace(kibana)
+			//trace(kibana)
 
 			storeDB(kibana)
 		}
@@ -43,7 +48,7 @@ func storeDB(kibana models.Kibana) {
 }
 
 func trace(kibana models.Kibana) {
-	l := models.Log{
+	l := Log{
 		Legalhold: kibana,
 	}
 

@@ -30,11 +30,6 @@ type User struct {
 	Device string `json:"device"`
 }
 
-// Log represents the top-level log structure.
-type Log struct {
-	Legalhold Kibana
-}
-
 // Kibana Legalhold log structure for Kibana
 type Kibana struct {
 	LHID   string `json:"lhid"`
