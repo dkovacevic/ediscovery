@@ -11,6 +11,8 @@
             background-color: #e5ddd5;
             margin: 0;
             padding: 0;
+            color: #333;
+            line-height: 1.6;
         }
 
         /* Header styling */
@@ -59,8 +61,7 @@
         /* Hover effect for table rows */
         tbody tr:hover {
             background-color: #f0f0f0;
-            text-decoration: underline;
-            color: #25d366;
+            cursor: pointer;
         }
 
         tbody tr {
@@ -91,7 +92,7 @@
 
         .nav-links a {
             margin: 0 15px;
-            color: #007bff;
+            color: #075e54;
             text-decoration: none;
             font-size: 1.1rem;
             font-weight: bold;
@@ -105,6 +106,7 @@
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
+                margin: 10px;
             }
 
             h1 {
@@ -112,7 +114,7 @@
             }
 
             table {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
             }
 
             th, td {
@@ -133,7 +135,10 @@
             .nav-links a {
                 display: block;
                 margin: 10px 0;
-                font-size: 1rem;
+            }
+
+            table {
+                font-size: 0.8rem;
             }
         }
     </style>

@@ -6,29 +6,28 @@
     <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon.png">
     <title>eDiscovery | Link Device</title>
     <style>
-        /* General body styling */
         body {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: Arial, sans-serif;
             background-color: #e5ddd5;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        /* Main container styling */
         .container {
             background-color: #ffffff;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            max-width: 90%;
+            width: 600px;
             text-align: center;
+            margin: 20px;
         }
 
-        /* Header styling */
         h1 {
             color: #075e54;
             font-size: 2rem;
@@ -36,12 +35,12 @@
         }
 
         p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #333;
             margin-bottom: 20px;
+            line-height: 1.5;
         }
 
-        /* QR Code styling */
         .qr-code {
             display: flex;
             justify-content: center;
@@ -51,24 +50,24 @@
             border-radius: 10px;
             border: 1px solid #ddd;
             margin-bottom: 20px;
-            font-size: 12px; /* Ensure ASCII code displays correctly */
-            line-height: 1.1;
+            overflow: auto;
+            max-width: 100%;
         }
 
         pre {
             font-family: "Courier New", Courier, monospace;
-            font-size: 12px;
+            font-size: 10px;
             text-align: center;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
-        /* Instruction styling */
         .instructions {
             margin-top: 20px;
             font-size: 1rem;
             color: #333;
         }
 
-        /* Back link styling */
         a {
             display: inline-block;
             margin-top: 20px;
@@ -78,10 +77,29 @@
             text-decoration: none;
             border-radius: 5px;
             font-size: 1rem;
+            transition: background-color 0.3s ease;
         }
 
         a:hover {
             background-color: #1ebe5b;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p, .instructions {
+                font-size: 0.9rem;
+            }
+
+            pre {
+                font-size: 8px;
+            }
         }
     </style>
 </head>
