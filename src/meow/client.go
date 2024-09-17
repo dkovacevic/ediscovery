@@ -1,4 +1,4 @@
-// client.go
+// Package meow client.go
 package meow
 
 import (
@@ -50,7 +50,7 @@ func NewClient(deviceStore *store.Device) *whatsmeow.Client {
 	return client
 }
 
-func GetUserInfo(client *whatsmeow.Client, jids []types.JID) (map[types.JID]types.UserInfo, error) {
+func _(client *whatsmeow.Client, jids []types.JID) (map[types.JID]types.UserInfo, error) {
 	return client.GetUserInfo(jids)
 }
 

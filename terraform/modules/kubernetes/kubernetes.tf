@@ -17,7 +17,7 @@ provider "kubernetes" {
   }
 }
 
-resource "kubernetes_deployment" "lh-whatsapp" {
+resource "kubernetes_deployment" "ediscovery" {
   metadata {
     name = var.app
     labels = {
@@ -40,7 +40,7 @@ resource "kubernetes_deployment" "lh-whatsapp" {
       }
       spec {
         container {
-          image = "536697232357.dkr.ecr.us-east-1.amazonaws.com/orion:latest"
+          image = "536697232357.dkr.ecr.us-east-1.amazonaws.com/ediscovery:latest"
           name = var.app
 
           port {
@@ -52,7 +52,7 @@ resource "kubernetes_deployment" "lh-whatsapp" {
   }
 }
 
-resource "kubernetes_service" "lh_whatsapp" {
+resource "kubernetes_service" "ediscovery" {
   metadata {
     name = var.app
   }

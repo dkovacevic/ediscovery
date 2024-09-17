@@ -1,13 +1,13 @@
-// event_handler.go
+// Package meow event_handler.go
 package meow
 
 import (
+	"ediscovery/src/database"
+	"ediscovery/src/models"
 	"encoding/json"
 	"fmt"
 	"go.mau.fi/whatsmeow/store"
 	"go.mau.fi/whatsmeow/types/events"
-	"lh-whatsapp/src/database"
-	"lh-whatsapp/src/models"
 	"log"
 )
 
@@ -47,7 +47,7 @@ func storeDB(kibana models.Kibana) {
 	}
 }
 
-func trace(kibana models.Kibana) {
+func _(kibana models.Kibana) {
 	l := Log{
 		Legalhold: kibana,
 	}

@@ -13,5 +13,5 @@ variable "cluster_name" {
 variable "app" {
   description = "Application name"
   type        = string
-  default     = "lh-whatsapp"
+  default     = "ediscovery"
 }

@@ -1,13 +1,13 @@
 package handlers
 
 import (
+	"ediscovery/src/database"
+	"ediscovery/src/models"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/types"
-	"lh-whatsapp/src/database"
-	"lh-whatsapp/src/models"
 	"net/http"
 	"strconv"
 )
@@ -52,7 +52,7 @@ func GetMessages(w http.ResponseWriter, r *http.Request) {
 
 	// Return the data as JSON
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 // Parse pagination parameters from the request, with defaults

@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"ediscovery/src/meow"
+	"ediscovery/src/models"
 	"encoding/json"
-	"lh-whatsapp/src/meow"
-	"lh-whatsapp/src/models"
 	"net/http"
 )
 

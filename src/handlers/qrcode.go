@@ -3,12 +3,12 @@ package handlers
 import (
 	"bytes"
 	"context"
+	"ediscovery/src/meow"
 	"encoding/json"
 	"fmt"
 	"github.com/mdp/qrterminal"
 	"go.mau.fi/whatsmeow"
 	waLog "go.mau.fi/whatsmeow/util/log"
-	"lh-whatsapp/src/meow"
 	"net/http"
 )
 
@@ -70,7 +70,7 @@ func GenerateQRCodeJSON(w http.ResponseWriter, _ *http.Request) {
 
 			// Send the response as JSON
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(response)
+			_ = json.NewEncoder(w).Encode(response)
 			return
 		}
 	}
