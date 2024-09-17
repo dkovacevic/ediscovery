@@ -40,7 +40,7 @@ resource "kubernetes_deployment" "lh-whatsapp" {
       }
       spec {
         container {
-          image = "536697232357.dkr.ecr.eu-west-3.amazonaws.com/orion:latest"
+          image = "536697232357.dkr.ecr.us-east-1.amazonaws.com/orion:latest"
           name = var.app
 
           port {

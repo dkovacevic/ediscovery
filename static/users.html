@@ -6,128 +6,139 @@
     <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon.png">
     <title>eDiscovery | Dashboard</title>
     <style>
-        /* General body styling */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e5ddd5;
+        :root {
+            --primary-color: #075e54;
+            --secondary-color: #25d366;
+            --bg-color: #e5ddd5;
+            --text-color: #333;
+            --white: #fff;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* Header styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
         header {
-            background-color: #075e54;
-            padding: 20px;
-            color: white;
+            background-color: var(--primary-color);
+            padding: 1rem;
+            color: var(--white);
             text-align: center;
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
 
-        /* Main container styling */
         .container {
             max-width: 1200px;
-            margin: 40px auto;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
-        /* Back link styling */
         .back-links {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
 
         .back-links a {
-            color: #25d366;
+            color: var(--secondary-color);
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .back-links a:hover {
             text-decoration: underline;
         }
 
-        /* Onboard New User Button */
         .onboard-btn {
-            background-color: #075e54;
-            color: white;
-            padding: 10px 20px;
-            font-size: 1.1rem;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             text-decoration: none;
+            transition: background-color 0.3s ease;
         }
 
         .onboard-btn:hover {
-            background-color: #1ebe5b;
+            background-color: var(--secondary-color);
         }
 
-        /* Table styling */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 1rem;
+            background-color: var(--white);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         th, td {
-            padding: 15px;
+            padding: 0.75rem;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
 
         th {
-            background-color: #075e54;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--white);
         }
 
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
 
-        /* Hover effect for table rows */
         tbody tr:hover {
             background-color: #f0f0f0;
-            text-decoration: underline;
-            color: #25d366;
-        }
-
-        tbody tr {
-            transition: background-color 0.3s ease;
             cursor: pointer;
         }
 
-        tbody td {
-            color: inherit; /* Inherit text color for consistency */
-        }
-
-        /* Footer styles */
         footer {
-            background-color: #075e54;
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--white);
             text-align: center;
-            padding: 10px 0;
-            margin-top: 40px;
+            padding: 1rem 0;
+            margin-top: 2rem;
         }
 
-        /* Mobile responsiveness */
         @media (max-width: 768px) {
+            .container {
+                padding: 0 0.5rem;
+            }
+
             table {
                 font-size: 0.9rem;
             }
+
             th, td {
-                padding: 12px;
+                padding: 0.5rem;
             }
 
             header h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
+            }
+
+            .back-links {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .onboard-btn {
+                margin-top: 0.5rem;
             }
         }
     </style>
@@ -162,7 +173,7 @@
 </div>
 
 <footer>
-    <p>&copy; 2024 eDiscovery.cz. All rights reserved.</p>
+    <p>&copy; 2024 eDiscovery.cz. All Rights Reserved.</p>
 </footer>
 
 <!-- External script for populating data -->
