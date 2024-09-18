@@ -24,7 +24,7 @@ FROM alpine
 RUN mkdir /opt/ediscovery
 
 # Set the current working directory inside the container
-WORKDIR /opt/whatsapp
+WORKDIR /opt/ediscovery
 
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/ediscovery .

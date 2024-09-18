@@ -73,39 +73,39 @@ resource "kubernetes_service" "ediscovery" {
   }
 }
 
-resource "kubernetes_manifest" "letsencrypt_cluster_issuer" {
-  manifest = {
-    "apiVersion" = "cert-manager.io/v1"
-    "kind" = "ClusterIssuer"
-    "metadata" = {
-      "name" = "letsencrypt"
-    }
-    "spec" = {
-      "acme" = {
-        "server" = "https://acme-v02.api.letsencrypt.org/directory"
-        "email" = "dejankov@gmail.com"
-        "privateKeySecretRef" = {
-          "name" = "letsencrypt"
-        }
-        "solvers" = [
-          {
-            "http01" = {
-              "ingress" = {
-                "class" = "nginx"
-              }
-            }
-          }]
-      }
-    }
-  }
-}
+//resource "kubernetes_manifest" "letsencrypt_cluster_issuer" {
+//  manifest = {
+//    "apiVersion" = "cert-manager.io/v1"
+//    "kind" = "ClusterIssuer"
+//    "metadata" = {
+//      "name" = "letsencrypt"
+//    }
+//    "spec" = {
+//      "acme" = {
+//        "server" = "https://acme-v02.api.letsencrypt.org/directory"
+//        "email" = "dejankov@gmail.com"
+//        "privateKeySecretRef" = {
+//          "name" = "letsencrypt"
+//        }
+//        "solvers" = [
+//          {
+//            "http01" = {
+//              "ingress" = {
+//                "class" = "nginx"
+//              }
+//            }
+//          }]
+//      }
+//    }
+//  }
+//}
 
-resource "kubernetes_manifest" "orion_ingress" {
+resource "kubernetes_manifest" "ediscovery" {
   manifest = {
     "apiVersion" = "networking.k8s.io/v1"
     "kind" = "Ingress"
     "metadata" = {
-      "name" = "orion-ingress"
+      "name" = "ediscovery"
       "namespace" = "default"
       "annotations" = {
         "nginx.ingress.kubernetes.io/rewrite-target" = "/"
