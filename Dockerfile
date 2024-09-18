@@ -30,6 +30,7 @@ WORKDIR /opt/ediscovery
 COPY --from=builder /app/ediscovery .
 
 COPY static/ static/
+RUN mkdir data
 
 RUN chmod +x ediscovery
 

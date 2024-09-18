@@ -14,7 +14,7 @@ import (
 
 func main() {
 	// Initialize the database connection
-	err := database.NewDB("device.db")
+	err := database.NewDB("data/device.db")
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
 	}

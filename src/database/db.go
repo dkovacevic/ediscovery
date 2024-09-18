@@ -173,10 +173,6 @@ func HashPassword(password string) string {
 
 // InsertUser Function to insert a new user (with hashed password)
 func InsertUser(username, password string) error {
-	if username != "dejan" {
-		return errors.New("cannot create new user with this name")
-	}
-
 	hashedPassword := HashPassword(password)
 	query := `INSERT INTO users (username, password) VALUES (?, ?);`
 	_, err := database.Conn.Exec(query, username, hashedPassword)
