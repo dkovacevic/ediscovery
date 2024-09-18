@@ -3,10 +3,10 @@ package database
 import (
 	"crypto/sha256"
 	"database/sql"
+	"ediscovery/src/models"
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"lh-whatsapp/src/models"
 )
 
 import (
@@ -41,7 +41,7 @@ func NewDB(dataSourceName string) error {
 	return nil
 }
 
-// Function to create the users table
+// CreateUsersTable Function to create the users table
 func CreateUsersTable() error {
 	query := `
     CREATE TABLE IF NOT EXISTS users (
@@ -104,7 +104,9 @@ func FetchPaginatedChat(lhid string, chatId string, page int, limit int) ([]mode
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		_ = rows.Close()
+	}(rows)
 
 	var messages []models.ChatMessage
 	for rows.Next() {
@@ -162,14 +164,14 @@ func FetchTotalMessagesCount(lhid string, chatId string) (int, error) {
 	return count, nil
 }
 
-// Function to hash the password using SHA-256
+// HashPassword Function to hash the password using SHA-256
 func HashPassword(password string) string {
 	hash := sha256.New()
 	hash.Write([]byte(password))
 	return hex.EncodeToString(hash.Sum(nil))
 }
 
-// Function to insert a new user (with hashed password)
+// InsertUser Function to insert a new user (with hashed password)
 func InsertUser(username, password string) error {
 	if username != "dejan" {
 		return errors.New("cannot create new user with this name")
@@ -184,7 +186,7 @@ func InsertUser(username, password string) error {
 	return nil
 }
 
-// Function to authenticate user by username and password
+// AuthenticateUser Function to authenticate user by username and password
 func AuthenticateUser(username, password string) (bool, error) {
 	var storedHash string
 	query := `SELECT password FROM users WHERE username = ?;`

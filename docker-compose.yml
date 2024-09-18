@@ -1,10 +1,10 @@
 services:
   goapp:
     build: .
-    container_name: lh-whatsapp
+    container_name: ediscovery
     volumes:
-      - goapp_data:/opt/whatsapp/
-    image: lh-whatsapp:latest
+      - goapp_data:/opt/ediscovery/
+    image: ediscovery:latest
 #    command: ["./main"]
     ports:
       - 8080:8080

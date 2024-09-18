@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lh-whatsapp-app
+  name: ediscovery-app
   labels:
-    app: lh-whatsapp
+    app: ediscovery
 
 spec:
   selector:
     matchLabels:
-      app: lh-whatsapp
+      app: ediscovery
 
   replicas: 1
 
   template:
     metadata:
       labels:
-        app: lh-whatsapp
+        app: ediscovery
 
     spec:
       restartPolicy: Always
 
       containers:
-        - name: lh-whatsapp
-          image: 536697232357.dkr.ecr.eu-west-3.amazonaws.com/orion:latest
+        - name: ediscovery
+          image: 536697232357.dkr.ecr.eu-west-3.amazonaws.com/ediscovery:latest
           imagePullPolicy: Always
           env:
             - name: LOG_LEVEL
@@ -34,10 +34,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: lh-whatsapp
+  name: ediscovery
 spec:
   selector:
-    app: lh-whatsapp
+    app: ediscovery
   type: NodePort
   ports:
     - name: http

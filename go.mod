@@ -1,4 +1,4 @@
-module lh-whatsapp
+module ediscovery
 
 go 1.21
 

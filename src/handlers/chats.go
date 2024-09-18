@@ -1,13 +1,13 @@
 package handlers
 
 import (
+	"ediscovery/src/database"
+	"ediscovery/src/meow"
+	"ediscovery/src/models"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/types"
-	"lh-whatsapp/src/database"
-	"lh-whatsapp/src/meow"
-	"lh-whatsapp/src/models"
 	"net/http"
 )
 
@@ -53,5 +53,5 @@ func GetChats(w http.ResponseWriter, r *http.Request) {
 
 	// Return the data as JSON
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(result)
+	_ = json.NewEncoder(w).Encode(result)
 }

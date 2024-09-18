@@ -17,7 +17,7 @@ provider "kubernetes" {
   }
 }
 
-resource "kubernetes_deployment" "lh-whatsapp" {
+resource "kubernetes_deployment" "ediscovery" {
   metadata {
     name = var.app
     labels = {
@@ -40,7 +40,7 @@ resource "kubernetes_deployment" "lh-whatsapp" {
       }
       spec {
         container {
-          image = "536697232357.dkr.ecr.us-east-1.amazonaws.com/orion:latest"
+          image = "536697232357.dkr.ecr.us-east-1.amazonaws.com/ediscovery:latest"
           name = var.app
 
           port {
@@ -52,7 +52,7 @@ resource "kubernetes_deployment" "lh-whatsapp" {
   }
 }
 
-resource "kubernetes_service" "lh_whatsapp" {
+resource "kubernetes_service" "ediscovery" {
   metadata {
     name = var.app
   }
@@ -73,39 +73,39 @@ resource "kubernetes_service" "lh_whatsapp" {
   }
 }
 
-resource "kubernetes_manifest" "letsencrypt_cluster_issuer" {
-  manifest = {
-    "apiVersion" = "cert-manager.io/v1"
-    "kind" = "ClusterIssuer"
-    "metadata" = {
-      "name" = "letsencrypt"
-    }
-    "spec" = {
-      "acme" = {
-        "server" = "https://acme-v02.api.letsencrypt.org/directory"
-        "email" = "dejankov@gmail.com"
-        "privateKeySecretRef" = {
-          "name" = "letsencrypt"
-        }
-        "solvers" = [
-          {
-            "http01" = {
-              "ingress" = {
-                "class" = "nginx"
-              }
-            }
-          }]
-      }
-    }
-  }
-}
+//resource "kubernetes_manifest" "letsencrypt_cluster_issuer" {
+//  manifest = {
+//    "apiVersion" = "cert-manager.io/v1"
+//    "kind" = "ClusterIssuer"
+//    "metadata" = {
+//      "name" = "letsencrypt"
+//    }
+//    "spec" = {
+//      "acme" = {
+//        "server" = "https://acme-v02.api.letsencrypt.org/directory"
+//        "email" = "dejankov@gmail.com"
+//        "privateKeySecretRef" = {
+//          "name" = "letsencrypt"
+//        }
+//        "solvers" = [
+//          {
+//            "http01" = {
+//              "ingress" = {
+//                "class" = "nginx"
+//              }
+//            }
+//          }]
+//      }
+//    }
+//  }
+//}
 
-resource "kubernetes_manifest" "orion_ingress" {
+resource "kubernetes_manifest" "ediscovery" {
   manifest = {
     "apiVersion" = "networking.k8s.io/v1"
     "kind" = "Ingress"
     "metadata" = {
-      "name" = "orion-ingress"
+      "name" = "ediscovery"
       "namespace" = "default"
       "annotations" = {
         "nginx.ingress.kubernetes.io/rewrite-target" = "/"

@@ -2,12 +2,12 @@
 package main
 
 import (
+	"ediscovery/src/database"
+	"ediscovery/src/handlers"
+	"ediscovery/src/meow"
 	"fmt"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
-	"lh-whatsapp/src/database"
-	"lh-whatsapp/src/handlers"
-	"lh-whatsapp/src/meow"
 	"log"
 	"net/http"
 )

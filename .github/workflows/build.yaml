@@ -33,7 +33,7 @@ jobs:
       - name: Build, tag, and push Docker image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: orion
+          ECR_REPOSITORY: ediscovery
 #          IMAGE_TAG: ${{ github.sha }}
           IMAGE_TAG: latest
         run: |

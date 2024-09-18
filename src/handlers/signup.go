@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"lh-whatsapp/src/database"
+	"ediscovery/src/database"
 	"net/http"
 )
 

@@ -1,8 +1,8 @@
 package handlers
 
 import (
+	"ediscovery/src/database"
 	"github.com/golang-jwt/jwt/v5"
-	"lh-whatsapp/src/database"
 	"net/http"
 	"net/url"
 	"time"
