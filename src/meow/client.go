@@ -18,7 +18,7 @@ func InitWhatsAppClients() ([]*whatsmeow.Client, error) {
 
 	dbLog := waLog.Stdout("Database", "INFO", true)
 
-	container, err = sqlstore.New("sqlite3", "file:device.db?_foreign_keys=on", dbLog)
+	container, err = sqlstore.New("sqlite3", "file:data/device.db?_foreign_keys=on", dbLog)
 
 	devices, err := container.GetAllDevices()
 	if err != nil {

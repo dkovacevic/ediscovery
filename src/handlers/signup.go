@@ -16,8 +16,13 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
-	if username == "" || password == "" {
-		http.Error(w, "Username and password are required", http.StatusBadRequest)
+	if password == "" {
+		http.Error(w, "Password field is required", http.StatusBadRequest)
+		return
+	}
+
+	if username != "admin" {
+		http.Error(w, "Invalid username", http.StatusBadRequest)
 		return
 	}
 
