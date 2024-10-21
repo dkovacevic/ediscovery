@@ -34,5 +34,7 @@ RUN mkdir data
 
 RUN chmod +x ediscovery
 
+EXPOSE  8080
+
 # Command to run the executable
 CMD ["./ediscovery"]
