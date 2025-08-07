@@ -1,3 +1,7 @@
+## Build
+```agsl
+docker buildx build --platform linux/amd64 -t dejankovacevic/ediscovery:0.2.4 .
+```
 
 ## Add HELM Repository
 ```shell

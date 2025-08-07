@@ -1,5 +1,6 @@
 terraform apply -target=module.aws_eks -auto-approve
 terraform apply -target=module.ingress_helm -auto-approve
+terraform apply -target=module.lh_kubernetes -auto-approve
+
 kubectl get svc -n ingress-nginx
-terraform apply -auto-approve
 kubectl logs -n cert-manager deploy/cert-manager

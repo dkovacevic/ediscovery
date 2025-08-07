@@ -9,6 +9,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"go.mau.fi/whatsmeow/types"
 	"net/http"
+	"context"
+
 )
 
 func GetChats(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +35,7 @@ func GetChats(w http.ResponseWriter, r *http.Request) {
 		chatJID, err := types.ParseJID(chats[i].ChatID)
 		if err == nil {
 			chats[i].PhoneNo = "+" + chatJID.User
-			contact, err := device.Contacts.GetContact(chatJID)
+            contact, err := device.Contacts.GetContact(context.Background(), chatJID)
 			if err == nil {
 				if contact.FullName != "" {
 					chats[i].Name = contact.FullName

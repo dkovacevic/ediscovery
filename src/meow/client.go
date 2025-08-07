@@ -1,7 +1,7 @@
-// Package meow client.go
 package meow
 
 import (
+	"context"
 	"fmt"
 	"go.mau.fi/whatsmeow"
 	"go.mau.fi/whatsmeow/store"
@@ -14,13 +14,16 @@ var container *sqlstore.Container
 
 func InitWhatsAppClients() ([]*whatsmeow.Client, error) {
 	var err error
-	var clients []*whatsmeow.Client // Slice to store all clients
+	var clients []*whatsmeow.Client
 
 	dbLog := waLog.Stdout("Database", "INFO", true)
 
-	container, err = sqlstore.New("sqlite3", "file:data/device.db?_foreign_keys=on", dbLog)
+	container, err = sqlstore.New(context.Background(), "sqlite3", "file:data/device.db?_foreign_keys=on", dbLog)
+	if err != nil {
+		return nil, err
+	}
 
-	devices, err := container.GetAllDevices()
+	devices, err := container.GetAllDevices(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -40,6 +43,7 @@ func InitWhatsAppClients() ([]*whatsmeow.Client, error) {
 			EventHandler(deviceStore, evt)
 		})
 
+		clients = append(clients, client)
 	}
 	return clients, nil
 }
@@ -55,7 +59,7 @@ func _(client *whatsmeow.Client, jids []types.JID) (map[types.JID]types.UserInfo
 }
 
 func GetAllDevices() ([]*store.Device, error) {
-	return container.GetAllDevices()
+	return container.GetAllDevices(context.Background())
 }
 
 func NewDevice() *store.Device {
@@ -63,5 +67,5 @@ func NewDevice() *store.Device {
 }
 
 func GetDevice(jid types.JID) (*store.Device, error) {
-	return container.GetDevice(jid)
+	return container.GetDevice(context.Background(), jid)
 }
